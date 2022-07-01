@@ -12,7 +12,7 @@ public class Car {
     private double pricePerMinute;
     private double initialFee;
 
-    public Car(String id, String designation, DriveType driveType, Time earliestTime, Time latestTime, double pricePerMinute, double initialFee) {
+    Car(String id, String designation, DriveType driveType, Time earliestTime, Time latestTime, double pricePerMinute, double initialFee) {
         this.id = id;
         this.designation = designation;
         this.driveType = driveType;
