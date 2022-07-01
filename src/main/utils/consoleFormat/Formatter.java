@@ -1,4 +1,4 @@
-package main.consoleFormat;
+package main.utils.consoleFormat;
 
 public final class Formatter {
 

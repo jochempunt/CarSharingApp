@@ -1,5 +1,7 @@
 package main.Users;
 
+import com.google.gson.*;
+
 import java.util.UUID;
 
 public class Client {
@@ -8,9 +10,10 @@ public class Client {
     private String username;
     private String hashedPassword;
 
-    Client(String username, String password, String hashedpassword) {
+    public Client(String username, String hashedpassword) {
         this.username = username;
         this.hashedPassword = hashedpassword;
+        id = UUID.randomUUID();
     }
 
     public UUID getId() {
@@ -24,4 +27,26 @@ public class Client {
     public String getHashedPassword() {
         return hashedPassword;
     }
+
+    @Override
+    public String toString() {
+        return "Client{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", hashedPassword='" + hashedPassword + '\'' +
+                '}';
+    }
+
+    public String fromJSON(){
+
+        Gson g = new Gson();
+        String  gg=  g.toJson(this,this.getClass());
+        JsonObject jsonObject = JsonParser.parseString(gg).getAsJsonObject();
+
+        Client c = g.fromJson(jsonObject,Client.class);
+
+
+        return c.toString();
+    }
+
 }
