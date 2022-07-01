@@ -1,5 +1,7 @@
 package main.Users;
 
+import main.utils.Response;
+
 public class LoginSignup {
 
     private static LoginSignup instance;
@@ -12,9 +14,33 @@ public class LoginSignup {
         return instance;
     }
 
-    public void signUp(String username, String password){
+    public Response SignUp(String username, String password){
+        if (!validNewUsername(username)){
+            return new Response(false,"usename can only contain alphanumeric values");
+        }
+        if (!uniqueUsername(username)){
+            return new Response(false,"username is already taken");
+        }
 
+        //TODO PasswordEncription
+        return  new Response(true,"created new user");
     }
+
+    public static boolean validNewUsername(String username){
+        return username.matches("^[a-zA-Z/d]+");
+    }
+
+    private boolean uniqueUsername(String username){
+        //TODO write script
+
+        return false;
+    }
+
+    private String hashPassword(){
+    return "";
+    }
+
+
 
 
 

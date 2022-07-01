@@ -7,36 +7,30 @@ import java.util.UUID;
 
 public class Client {
 
-    private UUID id;
+
     private String username;
-    private String hashedPassword;
+    private String encryptedPassword;
+    private String salt;
 
-    public Client(String username, String hashedpassword) {
+    public Client(String username, String encryptedPassword,String salt) {
         this.username = username;
-        this.hashedPassword = hashedpassword;
-        id = UUID.randomUUID();
+        this.encryptedPassword = encryptedPassword;
+        this.salt = salt;
+
+
     }
 
-    public UUID getId() {
-        return id;
-    }
+
 
     public String getUsername() {
         return username;
     }
 
     public String getHashedPassword() {
-        return hashedPassword;
+        return encryptedPassword;
     }
 
-    @Override
-    public String toString() {
-        return "Client{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", hashedPassword='" + hashedPassword + '\'' +
-                '}';
-    }
+
 
     public JsonObject toJson(){
         jsonHandler j = jsonHandler.getInstance();
