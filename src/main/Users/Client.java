@@ -1,6 +1,7 @@
 package main.Users;
 
 import com.google.gson.*;
+import main.utils.jsonHandler;
 
 import java.util.UUID;
 
@@ -37,16 +38,11 @@ public class Client {
                 '}';
     }
 
-    public String fromJSON(){
-
-        Gson g = new Gson();
-        String  gg=  g.toJson(this,this.getClass());
-        JsonObject jsonObject = JsonParser.parseString(gg).getAsJsonObject();
-
-        Client c = g.fromJson(jsonObject,Client.class);
-
-
-        return c.toString();
+    public JsonObject toJson(){
+        jsonHandler j = jsonHandler.getInstance();
+        return j.gson.toJsonTree(this,this.getClass()).getAsJsonObject();
     }
+
+
 
 }
