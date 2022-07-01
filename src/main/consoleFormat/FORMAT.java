@@ -1,4 +1,4 @@
-package consoleFormat;
+package main.consoleFormat;
 
 public enum FORMAT {
     BOLD("\u001B[1m"), UNDERSCORE("\u001B[4m"), RED("\u001B[31m"),

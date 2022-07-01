@@ -1,7 +1,7 @@
 package main;
 
-import consoleFormat.FORMAT;
-import consoleFormat.Formatter;
+import main.consoleFormat.FORMAT;
+import main.consoleFormat.Formatter;
 
 public class Main {
 
