@@ -15,8 +15,9 @@ public class Main {
 
         jsonHandler jH = jsonHandler.getInstance();
 
-        String usrname = "a1A111";
-        System.out.println(LoginSignup.validNewUsername(usrname));
+        LoginSignup logSign = LoginSignup.getInstance();
+
+        System.out.println(logSign.SignUp("bernd","1234").getMessage());
 
 
 

@@ -20,7 +20,7 @@ class EncryptorTest {
     @Test
     void getNewSalt() {
         String salt = Encryptor.getNewSalt(12);
-        // test if salt characters are indeed printable ascii characters
+        // test if salt contains indeed only printable ascii characters
         assertTrue(salt.matches("^[\\u0000-\\u007F]*$"));
 
     }
