@@ -6,7 +6,6 @@ import main.utils.jsonHandler;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -14,12 +13,9 @@ public class LoginSignup {
 
     private static LoginSignup instance;
     private final String clientPath = "src/data/clients/";
-    private Map<String, Client> clients;
+    private Map<String, Client> clients = getAllClients();
 
     private LoginSignup() {
-        clients = getAllClients();
-
-
     }
 
     public static LoginSignup getInstance() {
@@ -34,31 +30,30 @@ public class LoginSignup {
     }
 
 
-
-    public Response LogIn(String username, String password){
-        if(username.length()<1){
-            return new Response(false,"empty username");
+    public Response LogIn(String username, String password) {
+        if (username.length() < 1) {
+            return new Response(false, "empty username");
         }
-        if (password.length()<1){
-            return new Response(false,"empty password");
+        if (password.length() < 1) {
+            return new Response(false, "empty password");
         }
-        if (uniqueUsername(username)){
-            return new Response(false,"unkown username");
+        if (uniqueUsername(username)) {
+            return new Response(false, "unknown username");
         }
 
         Client tempClient = getAllClients().get(username);
 
-        if (!Encryptor.correctPassword(password,tempClient.getSalt(),tempClient.getHashedPassword())) {
-            return new Response(false,"incorrect password");
-        }else {
-            return new Response(true,"Welcome: "+ username);
+        if (!Encryptor.correctPassword(password, tempClient.getSalt(), tempClient.getHashedPassword())) {
+            return new Response(false, "incorrect password");
+        } else {
+            return new Response(true, "Welcome: " + username);
         }
     }
 
 
     public Response SignUp(String username, String password) {
         if (!validNewUsername(username)) {
-            return new Response(false, "usename can only contain alphanumeric values");
+            return new Response(false, "username can only contain alphanumeric values");
         }
         if (!uniqueUsername(username)) {
             return new Response(false, "username is already taken");
@@ -67,8 +62,6 @@ public class LoginSignup {
         if (password.length() < 3) {
             return new Response(false, "password has to be longer then 3 characters");
         }
-
-
 
 
         //password encryption
@@ -92,29 +85,29 @@ public class LoginSignup {
     private TreeMap<String, Client> getAllClients() {
         File folder = new File(clientPath);
         File[] files = folder.listFiles();
-        ArrayList<String> usernames = new ArrayList<>();
-        TreeMap<String, Client> allClients = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-        for (File file : files) {
-            // replace with regex which  removes everything that comes after the dot
-            if (file.getName().endsWith(".json")) {
-                usernames.add(file.getName().replaceFirst("[.][.json]+$", ""));
+        if (files.length >0) {
+            ArrayList<String> usernames = new ArrayList<>();
+            TreeMap<String, Client> allClients = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+            for (File file : files) {
+                // replace with regex which  removes everything that comes after the dot
+                if (file.getName().endsWith(".json")) {
+                    usernames.add(file.getName().replaceFirst("[.][.json]+$", ""));
+                }
             }
-
+            for (String username : usernames) {
+                Client tempClient = jsonHandler.getInstance().readJsonFileToObject(clientPath, username, Client.class);
+                allClients.put(username, tempClient);
+            }
+            return allClients;
+        }else {
+            TreeMap<String, Client> empty = null;
+            return empty
+                    ;
         }
-        for (int i = 0; i < usernames.size(); i++) {
-            Client tempClient = jsonHandler.getInstance().readJsonFileToObject(clientPath, usernames.get(i), Client.class);
-            allClients.put(usernames.get(i), tempClient);
-        }
-        return allClients;
     }
 
     private boolean uniqueUsername(String username) {
-
-        if (clients.containsKey(username)){
-            return false;
-        }
-
-        return true;
+        return !clients.containsKey(username);
     }
 
 
