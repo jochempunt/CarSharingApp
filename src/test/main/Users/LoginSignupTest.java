@@ -1,9 +1,7 @@
 package main.Users;
 
 import main.utils.jsonHandler;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -11,15 +9,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class LoginSignupTest {
 
-    LoginSignup ls = LoginSignup.getInstance();
+    static LoginSignup ls = LoginSignup.getInstance();
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void setUp() {
         ls.SignUp("Hans","1234");
     }
 
-    @AfterEach
-    void tearDown() {
+    @AfterAll
+    static void tearDown() {
         jsonHandler.getInstance().deleteFile("src/data/clients/Hans.json");
     }
 
@@ -32,6 +30,9 @@ class LoginSignupTest {
 
     @Test
     void signUp() {
+
         assertFalse(ls.SignUp("Hans","1234").isSuccess());
+        assertTrue(ls.SignUp("Franzi66","abc").isSuccess());
+        jsonHandler.getInstance().deleteFile("src/main/");
     }
 }

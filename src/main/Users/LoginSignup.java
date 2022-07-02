@@ -26,7 +26,7 @@ public class LoginSignup {
     }
 
     public static boolean validNewUsername(String username) {
-        return username.matches("^[a-zA-Z/d]+");
+        return username.matches("^[a-zA-Z0-9]+");
     }
 
 
