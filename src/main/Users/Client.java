@@ -3,18 +3,16 @@ package main.Users;
 import com.google.gson.*;
 import main.utils.jsonHandler;
 
-import java.util.UUID;
-
 public class Client {
 
 
     private String username;
-    private String encryptedPassword;
+    private String hashedPassword;
     private String salt;
 
-    public Client(String username, String encryptedPassword,String salt) {
+    public Client(String username, String hashedPassword, String salt) {
         this.username = username;
-        this.encryptedPassword = encryptedPassword;
+        this.hashedPassword = hashedPassword;
         this.salt = salt;
 
 
@@ -27,10 +25,12 @@ public class Client {
     }
 
     public String getHashedPassword() {
-        return encryptedPassword;
+        return hashedPassword;
     }
 
-
+    public String getSalt() {
+        return salt;
+    }
 
     public JsonObject toJson(){
         jsonHandler j = jsonHandler.getInstance();

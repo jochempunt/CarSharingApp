@@ -33,6 +33,29 @@ public class LoginSignup {
         return username.matches("^[a-zA-Z/d]+");
     }
 
+
+
+    public Response LogIn(String username, String password){
+        if(username.length()<1){
+            return new Response(false,"empty username");
+        }
+        if (password.length()<1){
+            return new Response(false,"empty password");
+        }
+        if (uniqueUsername(username)){
+            return new Response(false,"unkown username");
+        }
+
+        Client tempClient = getAllClients().get(username);
+
+        if (!Encryptor.correctPassword(password,tempClient.getSalt(),tempClient.getHashedPassword())) {
+            return new Response(false,"incorrect password");
+        }else {
+            return new Response(true,"Welcome: "+ username);
+        }
+    }
+
+
     public Response SignUp(String username, String password) {
         if (!validNewUsername(username)) {
             return new Response(false, "usename can only contain alphanumeric values");
@@ -44,6 +67,9 @@ public class LoginSignup {
         if (password.length() < 3) {
             return new Response(false, "password has to be longer then 3 characters");
         }
+
+
+
 
         //password encryption
 
