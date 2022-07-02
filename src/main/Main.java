@@ -17,7 +17,7 @@ public class Main {
 
         LoginSignup logSign = LoginSignup.getInstance();
 
-        System.out.println(logSign.SignUp("bernd","1234").getMessage());
+        System.out.println(logSign.SignUp("fernd","12dddE").getMessage());
 
 
 

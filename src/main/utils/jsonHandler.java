@@ -1,9 +1,9 @@
 package main.utils;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import main.Users.Client;
+import com.google.gson.stream.JsonReader;
 
 import java.io.*;
 
@@ -17,7 +17,7 @@ public class jsonHandler {
 
     public FileReader reader;
     private jsonHandler(){
-        gson = new Gson();
+        gson = new GsonBuilder().setPrettyPrinting().create();
     }
 
     public static jsonHandler getInstance() {
@@ -38,7 +38,9 @@ public class jsonHandler {
         }
     }
 
-    public <T>T readJsonFile(String filePath, String fileName, Class c){
+
+    // this method always returns an Object of the Wanted type from the Given Class;
+    public <T>T readJsonFileToObject(String filePath, String fileName, Class c){
         try {
 
             reader = new FileReader(filePath+fileName+".json");
@@ -48,6 +50,8 @@ public class jsonHandler {
             throw new RuntimeException(e);
         }
     }
+
+
 
 
 
