@@ -1,4 +1,4 @@
 package main.carSharing;
 
-public class CarManager {
+public class CarBO {
 }
