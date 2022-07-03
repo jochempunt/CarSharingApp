@@ -19,6 +19,7 @@ class LoginSignupTest {
     @AfterAll
     static void tearDown() {
         jsonHandler.getInstance().deleteFile("src/data/clients/Hans.json");
+        jsonHandler.getInstance().deleteFile("src/data/clients/Franzi66.json");
     }
 
     @Test
@@ -33,6 +34,6 @@ class LoginSignupTest {
 
         assertFalse(ls.SignUp("Hans","1234").isSuccess());
         assertTrue(ls.SignUp("Franzi66","abc").isSuccess());
-        jsonHandler.getInstance().deleteFile("src/main/");
+
     }
 }

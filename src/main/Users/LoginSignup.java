@@ -13,6 +13,8 @@ public class LoginSignup {
 
     private static LoginSignup instance;
     private final String clientPath = "src/data/clients/";
+
+    private Client currentClient = null;
     private Map<String, Client> clients = getAllClients();
 
     private LoginSignup() {
@@ -43,9 +45,11 @@ public class LoginSignup {
 
         Client tempClient = getAllClients().get(username);
 
+
         if (!Encryptor.correctPassword(password, tempClient.getSalt(), tempClient.getHashedPassword())) {
             return new Response(false, "incorrect password");
         } else {
+            currentClient = tempClient;
             return new Response(true, "Welcome: " + username);
         }
     }
@@ -85,7 +89,7 @@ public class LoginSignup {
     private TreeMap<String, Client> getAllClients() {
         File folder = new File(clientPath);
         File[] files = folder.listFiles();
-        if (files.length >0) {
+        if (files.length > 0) {
             ArrayList<String> usernames = new ArrayList<>();
             TreeMap<String, Client> allClients = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
             for (File file : files) {
@@ -99,7 +103,7 @@ public class LoginSignup {
                 allClients.put(username, tempClient);
             }
             return allClients;
-        }else {
+        } else {
             TreeMap<String, Client> empty = null;
             return empty
                     ;
@@ -111,4 +115,7 @@ public class LoginSignup {
     }
 
 
+    public Client getCurrentClient() {
+        return currentClient;
+    }
 }

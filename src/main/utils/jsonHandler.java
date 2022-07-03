@@ -61,7 +61,7 @@ public class jsonHandler {
     public void deleteFile(String filepath) {
         try {
             File file = new File(String.valueOf(Path.of(filepath)));
-            System.out.println();
+            System.out.println(file.canRead());
             Files.deleteIfExists(Paths.get(file.getAbsolutePath()));
 
         } catch (Exception e) {
