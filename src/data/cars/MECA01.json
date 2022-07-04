@@ -1,0 +1,9 @@
+{
+  "id": "MECA01",
+  "designation": "Mercedes A klasse",
+  "driveType": "CONVENTIONAL",
+  "earliestTime": "14:45",
+  "latestTime": "21:30",
+  "pricePerMinute": 30.0,
+  "initialFee": 20.5
+}

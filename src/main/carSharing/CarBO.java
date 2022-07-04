@@ -14,8 +14,13 @@ public class CarBO {
     private ArrayList<Car> allCars = new ArrayList<Car>();
     private Booking[] allBookings;
 
+
+    public ArrayList<Car> getCallCars(){
+        return allCars;
+    }
+
     private CarBO() {
-        allCars = getAllCars();
+        allCars = getCarsFromFiles();
     }
 
     public static CarBO getInstance() {
@@ -32,7 +37,7 @@ public class CarBO {
         Car newCar = new Car(id, designation, driveType, earliest, latest, ppm, fee);
 
         jsonHandler.getInstance().writeJsonfile(carPath, id, newCar.toJson());
-
+        allCars.add(newCar);
         return new Response(true, "added Car" + id + " succsesfully");
     }
 
@@ -47,7 +52,7 @@ public class CarBO {
 
     }
 
-    public ArrayList<Car> getAllCars() {
+    public ArrayList<Car> getCarsFromFiles() {
         ArrayList<Car> tempCars = new ArrayList<>();
         File folder = new File(carPath);
         File[] files = folder.listFiles();

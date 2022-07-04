@@ -80,7 +80,7 @@ public class LoginSignup {
 
         j.writeJsonfile(clientPath, username, newClient.toJson());
 
-        clients = getAllClients();
+        clients.put(newClient.getUsername(),newClient);
 
 
         return new Response(true, "created new user");
@@ -109,6 +109,9 @@ public class LoginSignup {
                     ;
         }
     }
+
+
+
 
     private boolean uniqueUsername(String username) {
         return !clients.containsKey(username);

@@ -10,6 +10,8 @@ public class Client {
     private String hashedPassword;
     private String salt;
 
+
+
     public Client(String username, String hashedPassword, String salt) {
         this.username = username;
         this.hashedPassword = hashedPassword;

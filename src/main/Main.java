@@ -23,8 +23,8 @@ public class Main {
         LocalTime timeL = LocalTime.of(21, 30);
 
 
-        System.out.println(carBO.addCar("BMW3er", "BMW 3er 123", DriveType.CONVENTIONAL, timeE, timeL, 50.0, 100.5).getMessage());
-
+        System.out.println(carBO.addCar("MECA01", "Mercedes A klasse", DriveType.CONVENTIONAL, timeE, timeL, 30.0, 20.5).getMessage());
+        carBO.getCallCars().forEach((n)-> System.out.println(n.getDesignation()));
 
     }
 
