@@ -3,17 +3,19 @@ package main.carSharing;
 import main.utils.Response;
 import main.utils.jsonHandler;
 
+import java.io.File;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class CarBO {
 
     private static CarBO instance;
-    private ArrayList<Car> Cars = new ArrayList<Car>();
+    private static String carPath = "src/data/cars/";
+    private ArrayList<Car> allCars = new ArrayList<Car>();
     private Booking[] allBookings;
 
     private CarBO() {
-
+        allCars = getAllCars();
     }
 
     public static CarBO getInstance() {
@@ -29,15 +31,15 @@ public class CarBO {
         }
         Car newCar = new Car(id, designation, driveType, earliest, latest, ppm, fee);
 
-        jsonHandler.getInstance().writeJsonfile("src/data/cars/", id, newCar.toJson());
+        jsonHandler.getInstance().writeJsonfile(carPath, id, newCar.toJson());
 
         return new Response(true, "added Car" + id + " succsesfully");
     }
 
     public boolean isUniqueId(String id) {
 
-        for (int i = 0; i < Cars.size(); i++) {
-            if (id.equals(Cars.get(i).getId())) {
+        for (int i = 0; i < allCars.size(); i++) {
+            if (id.equals(allCars.get(i).getId())) {
                 return false;
             }
         }
@@ -45,5 +47,23 @@ public class CarBO {
 
     }
 
+    public ArrayList<Car> getAllCars() {
+        ArrayList<Car> tempCars = new ArrayList<>();
+        File folder = new File(carPath);
+        File[] files = folder.listFiles();
+        if (files.length > 0) {
+            for (File f : files) {
+                if (f.getName().endsWith(".json")) {
+                    String fileName = f.getName().replaceFirst("[.][.json]+$", "");
+                    Car tempcar = jsonHandler.getInstance().readJsonFileToObject(carPath, fileName, Car.class);
+                    tempCars.add(tempcar);
+                }
+
+            }
+            return tempCars;
+        }
+        return null;
+
+    }
 
 }

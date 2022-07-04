@@ -4,7 +4,6 @@ import com.google.gson.JsonObject;
 import main.utils.DateTimeManager;
 import main.utils.jsonHandler;
 
-import java.sql.Time;
 import java.time.LocalTime;
 
 public class Car {
@@ -27,15 +26,21 @@ public class Car {
         this.initialFee = initialFee;
     }
 
+    public Car(String id, String designation, DriveType driveType, String earliestTime, String latestTime, double pricePerMinute, double initialFee) {
+        this.id = id;
+        this.designation = designation;
+        this.driveType = driveType;
+        this.earliestTime = earliestTime;
+        this.latestTime = latestTime;
+        this.pricePerMinute = pricePerMinute;
+        this.initialFee = initialFee;
+    }
 
 
 
 
 
-
-
-
-// -----------------------------Getters--------------------------------//
+    // -----------------------------Getters--------------------------------//
     public String getId() {
         return id;
     }
@@ -64,7 +69,7 @@ public class Car {
         return initialFee;
     }
 
-    public JsonObject toJson(){
-         return jsonHandler.getInstance().gson.toJsonTree(this,this.getClass()).getAsJsonObject();
+    public JsonObject toJson() {
+        return jsonHandler.getInstance().gson.toJsonTree(this, this.getClass()).getAsJsonObject();
     }
 }
