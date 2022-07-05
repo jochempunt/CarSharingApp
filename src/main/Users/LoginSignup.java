@@ -80,7 +80,7 @@ public class LoginSignup {
 
         j.writeJsonfile(clientPath, username, newClient.toJson());
 
-        clients.put(newClient.getUsername(),newClient);
+        clients.put(newClient.getUsername(), newClient);
 
 
         return new Response(true, "created new user");
@@ -89,9 +89,9 @@ public class LoginSignup {
     private TreeMap<String, Client> getAllClients() {
         File folder = new File(clientPath);
         File[] files = folder.listFiles();
+        TreeMap<String, Client> allClients = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
         if (files.length > 0) {
             ArrayList<String> usernames = new ArrayList<>();
-            TreeMap<String, Client> allClients = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
             for (File file : files) {
                 // replace with regex which  removes everything that comes after the dot
                 if (file.getName().endsWith(".json")) {
@@ -104,13 +104,9 @@ public class LoginSignup {
             }
             return allClients;
         } else {
-            TreeMap<String, Client> empty = null;
-            return empty
-                    ;
+            return allClients;
         }
     }
-
-
 
 
     private boolean uniqueUsername(String username) {
