@@ -18,7 +18,7 @@ public final class Encryptor {
     }
 
     // the salt is used to make the hash more secure, it's a randomly generated string
-    public static String getNewSalt(int sLength) {
+    public static String createNewSalt(int sLength) {
         if (sLength < 1) {
             System.err.println("error in getNew Salt: length must be at least 1 or more");
             return "";

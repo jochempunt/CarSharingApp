@@ -8,6 +8,9 @@ import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class CarBO {
 
@@ -25,16 +28,28 @@ public class CarBO {
 
     public static CarBO getInstance() {
         if (instance == null) {
-            return new CarBO();
+            instance = new CarBO();
         }
         return instance;
     }
 
-    public ArrayList<Car> getAllCars() {
-        return allCars;
+    // comparator, to be able to sort the car arraylist by name alphabetically
+    public static Comparator<Car> carNameComparator = new Comparator<Car>() {
+        @Override
+        public int compare(Car o1, Car o2) {
+            String designation1 = o1.getDesignation().toLowerCase();
+            String designation2 = o2.getDesignation().toLowerCase();
+            return designation1.compareTo(designation2);
+        }
+    };
+
+    public ArrayList<Car> getAllCarsSorted() {
+        ArrayList<Car> copyOfAllCars = new ArrayList<>(allCars);
+        copyOfAllCars.sort(carNameComparator);
+        return copyOfAllCars;
     }
 
-    public Response addCar(String id, String designation, DriveType driveType, LocalTime earliest,int maxDuration, LocalTime latest, double ppm, double fee) {
+    public Response addCar(String id, String designation, DriveType driveType, LocalTime earliest, int maxDuration, LocalTime latest, double ppm, double fee) {
         if (!isUniqueId(id)) {
             return new Response(false, "Car id is already taken");
         }
@@ -158,11 +173,11 @@ public class CarBO {
             return new Response(false, "Desired time period is outside of the Cars Service-Time");
         }
 
-        if (!timeIsAvailable(carID,date,time,duration)){
-            return new Response(false,"Car is already Booked in this time period");
+        if (!timeIsAvailable(carID, date, time, duration)) {
+            return new Response(false, "Car is already Booked in this time period");
         }
 
-        return new Response(true,"Car is available");
+        return new Response(true, "Car is available");
     }
 
 

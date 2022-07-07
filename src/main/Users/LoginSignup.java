@@ -11,6 +11,11 @@ import java.util.TreeMap;
 
 public class LoginSignup {
 
+
+
+
+
+
     private static LoginSignup instance;
     private final String clientPath = "src/data/clients/";
 
@@ -70,7 +75,7 @@ public class LoginSignup {
 
         //password encryption
 
-        String userSalt = Encryptor.getNewSalt(12);
+        String userSalt = Encryptor.createNewSalt(12);
 
         String hashedPw = Encryptor.hash(password, userSalt);
 

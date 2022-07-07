@@ -26,16 +26,16 @@ public class Main {
         LocalTime timeE = LocalTime.of(14, 00);
         int duration = 60;
 
-        String cID = "BMW3er";
+        String cID = "VWIDBZ";
 
-        //carBO.addCar(cID,"BMW 3er",DriveType.CONVENTIONAL,LocalTime.of(6,0),120,LocalTime.of(20,30),30.0,40.0);
+        //carBO.addCar(cID,"VW ID.Buzz",DriveType.ELECTRIC,LocalTime.of(6,0),120,LocalTime.of(22,30),30.0,40.0);
 
         //carBO.bookCar(cID,dateE,timeE,duration);
 
-        System.out.println(carBO.checkIfCarAvailable(cID,dateE,LocalTime.of(12,30),60).getMessage());
+        //System.out.println(carBO.checkIfCarAvailable(cID,dateE,LocalTime.of(12,30),60).getMessage());
 
 
-        //System.out.println(carBO.bookCar(cID,dateE,timeE,duration).getMessage());
+        carBO.getAllCarsSorted().forEach((n)-> System.out.println(n.getDesignation()));
 
 
 
