@@ -1,0 +1,10 @@
+{
+  "id": "BMW3er",
+  "designation": "BMW 3er",
+  "driveType": "CONVENTIONAL",
+  "earliestTime": "06:00",
+  "latestTime": "20:30",
+  "maxDuration": 120,
+  "pricePerMinute": 30.0,
+  "initialFee": 40.0
+}
