@@ -1,0 +1,10 @@
+{
+  "id": "MECB1",
+  "designation": "Mercedes B-Klasse ",
+  "driveType": "CONVENTIONAL",
+  "earliestTime": "06:00",
+  "latestTime": "22:30",
+  "maxDuration": 120,
+  "pricePerMinute": 30.0,
+  "initialFee": 40.0
+}

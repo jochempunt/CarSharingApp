@@ -1,0 +1,10 @@
+{
+  "id": "AUDETr",
+  "designation": "Audi E-tron ",
+  "driveType": "ELECTRIC",
+  "earliestTime": "06:00",
+  "latestTime": "22:30",
+  "maxDuration": 120,
+  "pricePerMinute": 30.0,
+  "initialFee": 40.0
+}
