@@ -12,7 +12,7 @@ import java.util.TreeMap;
 public class LoginSignup {
 
 
-
+    //private final Client admin = new Client("ADMIN","GdBm5atGoysDReaeh+Rm3o6CMFo\u003d","xHS7rJiF0JN8PiCe");
 
 
 
@@ -38,18 +38,15 @@ public class LoginSignup {
 
 
     public Response LogIn(String username, String password) {
-        if (username.length() < 1) {
-            return new Response(false, "empty username");
-        }
-        if (password.length() < 1) {
-            return new Response(false, "empty password");
-        }
+
+
+
+
         if (uniqueUsername(username)) {
             return new Response(false, "unknown username");
         }
 
         Client tempClient = getAllClients().get(username);
-
 
         if (!Encryptor.correctPassword(password, tempClient.getSalt(), tempClient.getHashedPassword())) {
             return new Response(false, "incorrect password");
