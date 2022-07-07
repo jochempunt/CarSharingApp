@@ -19,13 +19,23 @@ public class Main {
         System.out.println(logSign.LogIn("Bernd", "1234").getMessage());
 
 
+
+
+
         LocalDate dateE = LocalDate.of(2022,04,05);
-        LocalTime timeE = LocalTime.of(14, 45);
-        int duration = 11;
+        LocalTime timeE = LocalTime.of(14, 00);
+        int duration = 60;
 
         String cID = "BMW3er";
 
-        System.out.println(carBO.bookCar(cID,dateE,timeE,duration).getMessage());
+        //carBO.addCar(cID,"BMW 3er",DriveType.CONVENTIONAL,LocalTime.of(6,0),120,LocalTime.of(20,30),30.0,40.0);
+
+        //carBO.bookCar(cID,dateE,timeE,duration);
+
+        System.out.println(carBO.checkIfCarAvailable(cID,dateE,LocalTime.of(12,30),60).getMessage());
+
+
+        //System.out.println(carBO.bookCar(cID,dateE,timeE,duration).getMessage());
 
 
 

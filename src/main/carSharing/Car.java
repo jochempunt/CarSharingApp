@@ -13,25 +13,29 @@ public class Car {
     private DriveType driveType;
     private String earliestTime;
     private String latestTime;
+
+    private int maxDuration;
     private double pricePerMinute;
     private double initialFee;
 
-    public Car(String id, String designation, DriveType driveType, LocalTime earliestTime, LocalTime latestTime, double pricePerMinute, double initialFee) {
+    public Car(String id, String designation, DriveType driveType, LocalTime earliestTime, LocalTime latestTime, int maxDuration, double pricePerMinute, double initialFee) {
         this.id = id;
         this.designation = designation;
         this.driveType = driveType;
         this.earliestTime = DateTimeManager.timeToString(earliestTime);
         this.latestTime = DateTimeManager.timeToString(latestTime);
+        this.maxDuration = maxDuration;
         this.pricePerMinute = pricePerMinute;
         this.initialFee = initialFee;
     }
 
-    public Car(String id, String designation, DriveType driveType, String earliestTime, String latestTime, double pricePerMinute, double initialFee) {
+    public Car(String id, String designation, DriveType driveType, String earliestTime, String latestTime, int maxDuration, double pricePerMinute, double initialFee) {
         this.id = id;
         this.designation = designation;
         this.driveType = driveType;
         this.earliestTime = earliestTime;
         this.latestTime = latestTime;
+        this.maxDuration = maxDuration;
         this.pricePerMinute = pricePerMinute;
         this.initialFee = initialFee;
     }
@@ -43,6 +47,11 @@ public class Car {
     // -----------------------------Getters--------------------------------//
     public String getId() {
         return id;
+    }
+
+
+    public int getMaxDuration() {
+        return maxDuration;
     }
 
     public String getDesignation() {
