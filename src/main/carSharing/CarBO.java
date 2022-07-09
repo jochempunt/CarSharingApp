@@ -43,6 +43,19 @@ public class CarBO {
         }
     };
 
+    public ArrayList<Car> searchCarByDesignation ( String designation, DriveType driveType){
+        ArrayList<Car> foundCars = new ArrayList<>();
+        for (int i =0; i< allCars.size();i++){
+           if (allCars.get(i).getDesignation().contains(designation)){
+               if (allCars.get(i).getDriveType().equals(driveType)){
+                   foundCars.add(allCars.get(i));
+               }
+           }
+        }
+        return foundCars;
+
+    }
+
     public ArrayList<Car> getAllCarsSorted() {
         ArrayList<Car> copyOfAllCars = new ArrayList<>(allCars);
         copyOfAllCars.sort(carNameComparator);

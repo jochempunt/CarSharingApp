@@ -2,6 +2,8 @@ package main.carSharing;
 
 import com.google.gson.JsonObject;
 import main.utils.DateTimeManager;
+import main.utils.consoleFormat.FORMAT;
+import main.utils.consoleFormat.Formatter;
 import main.utils.jsonHandler;
 
 import java.time.LocalTime;
@@ -41,14 +43,23 @@ public class Car {
     }
 
 
-
-
-
     // -----------------------------Getters--------------------------------//
     public String getId() {
         return id;
     }
 
+
+    @Override
+    public String toString() {
+        return
+                Formatter.format(FORMAT.BOLD, FORMAT.BLUE, designation) + "\n" +
+                        "type: " + driveType + "\n" +
+                        "earliest Time: " + earliestTime + "\n" +
+                        "latest Time: " + latestTime + "\n" +
+                        "max. Duration: " + maxDuration + "\n" +
+                        "price per minute: " + pricePerMinute + "\n" +
+                        "Fee: " + initialFee + "\n";
+    }
 
     public int getMaxDuration() {
         return maxDuration;
