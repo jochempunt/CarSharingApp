@@ -1,0 +1,10 @@
+{
+  "id": "SKENY1",
+  "designation": "Skoda Enyak iV",
+  "driveType": "ELECTRIC",
+  "earliestTime": "07:00",
+  "latestTime": "22:30",
+  "maxDuration": 300,
+  "pricePerMinute": 0.3,
+  "initialFee": 25.0
+}

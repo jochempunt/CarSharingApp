@@ -1,0 +1,10 @@
+{
+  "id": "HONDAE",
+  "designation": "Honda e",
+  "driveType": "ELECTRIC",
+  "earliestTime": "07:00",
+  "latestTime": "23:00",
+  "maxDuration": 320,
+  "pricePerMinute": 0.3,
+  "initialFee": 30.0
+}

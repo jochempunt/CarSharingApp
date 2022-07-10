@@ -14,34 +14,31 @@ public class Booking {
     private final String date;
     private final String time;
     private final int durationInMins;
-
-
-
     private final double totalCost;
 
-    public Booking(String carID, String clientName, LocalDate date, LocalTime time, int durationInMins, double totalCost,int count) {
+    public Booking(String carID, String clientName, LocalDate date, LocalTime time, int durationInMins, double totalCost, int count) {
         CarID = carID;
         this.clientName = clientName;
         this.date = DateTimeManager.DateToString(date);
         this.time = DateTimeManager.timeToString(time);
         this.durationInMins = durationInMins;
         this.totalCost = totalCost;
-        id = carID+ "-" + count;
+        id = carID + "-" + count;
     }
+
     public Booking(String carID, String clientName, String date, String time, int durationInMins, double totalCost, String id) {
         CarID = carID;
         this.clientName = clientName;
         this.date = date;
-        this.time =time;
+        this.time = time;
         this.durationInMins = durationInMins;
         this.totalCost = totalCost;
         this.id = id;
     }
 
-
-
-
-
+    public double getTotalCost() {
+        return totalCost;
+    }
 
     @Override
     public String toString() {
@@ -52,7 +49,7 @@ public class Booking {
                 ", date=" + date +
                 ", time=" + time +
                 ", DurationinMins=" + durationInMins +
-                ", totalcosts="+ totalCost + ",-"+
+                ", totalcosts=" + totalCost + ",-" +
                 '}';
     }
 

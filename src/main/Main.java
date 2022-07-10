@@ -32,7 +32,29 @@ public class Main {
         return s.matches("\\d+");
     }
 
+
+
+
     //function that returns validated console input as  Date and Time , entry[0] = date, entry[1]= time
+
+    public static Response bookCar(Car car, LocalDate date, LocalTime time, int duration, Scanner sc) {
+        double price = duration * car.getPricePerMinute() + car.getInitialFee();
+
+        System.out.println("Do you want to book" + car.getDesignation() + " for a total of " + price + ",-" +
+                "\nYes " + Formatter.format(FORMAT.YELLOW, "y") + " No " + Formatter.format(FORMAT.YELLOW, "n"));
+        String acceptInput = sc.next();
+        switch (acceptInput) {
+            case "y":
+                return CarBO.getInstance().bookCar(car.getId(), date, time, duration);
+            case "n":
+                break;
+            default:
+                return new Response(false, "unkown input, please try again");
+        }
+        return null;
+    }
+
+
     public static String[] inputDateTime(Scanner sc) {
         String[] dateTimeArray = new String[2];
         boolean invalidDate = true;
@@ -93,25 +115,40 @@ public class Main {
 
     public static void main(String[] args) {
 
-
         LoginSignup logSign = LoginSignup.getInstance();
         CarBO carBO = CarBO.getInstance();
-
         Scanner inputScanner = new Scanner(System.in);
-
         // logSign.SignUp("ADMIN","LargeRichard");
-
         //System.out.println(logSign.LogIn("ADMIN","LargeRichard").getMessage());
-
-
         System.out.println("Welcome to the CarSharingApp");
+
+
+
+
+
 
 
         mainloop:
         while (true) {
-            System.out.println("choose an action: " + Formatter.format(FORMAT.BOLD, FORMAT.YELLOW, "s") + " to Signup " +
-                    Formatter.format(FORMAT.BOLD, FORMAT.YELLOW, "l") + " to Login or " + Formatter.format(FORMAT.BOLD, FORMAT.YELLOW, "a") + " to see All cars, " +
-                    Formatter.format(FORMAT.BOLD, FORMAT.YELLOW, "f") + " to find a specific car or car-brand " + Formatter.format(FORMAT.BOLD, FORMAT.YELLOW, "e") + " to Exit, ");
+            String specialFeaturesString;
+            if (logSign.getCurrentClient() == null) {
+                specialFeaturesString = Formatter.format(FORMAT.BOLD, FORMAT.YELLOW, "s") + " to Signup " +
+                        Formatter.format(FORMAT.BOLD, FORMAT.YELLOW, "l") + " to Login or ";
+            } else {
+                specialFeaturesString = Formatter.format(FORMAT.BOLD, FORMAT.YELLOW, "b") + " to see your previous Bookings, " +
+                        Formatter.format(FORMAT.BOLD, FORMAT.YELLOW, "c") + " see cost Statistics, ";
+
+                if (logSign.getCurrentClient().getUsername().equals("ADMIN")) {
+                    specialFeaturesString += Formatter.format(FORMAT.BOLD, FORMAT.YELLOW, "ac") + " too add a new car, ";
+                }
+            }
+
+
+            String menuString = "choose an action: " + specialFeaturesString + Formatter.format(FORMAT.BOLD, FORMAT.YELLOW, "a") + " to see All cars, " +
+                    Formatter.format(FORMAT.BOLD, FORMAT.YELLOW, "f") + " to find a specific car or car-brand " + Formatter.format(FORMAT.BOLD, FORMAT.YELLOW, "e") + " to Exit, ";
+
+
+            System.out.println(menuString);
             String input = inputScanner.next().toLowerCase();
             switch (input) {
                 case "e": //--------------------------------- Exit-----------------------------------//
@@ -159,7 +196,7 @@ public class Main {
                                     nr = Integer.parseInt(tempInput);
 
                                     Car currentCar = foundCars.get(nr);
-                                    System.out.println(Formatter.format(FORMAT.BLUE,currentCar.getDesignation()));
+                                    System.out.println(Formatter.format(FORMAT.BLUE, currentCar.getDesignation()));
 
                                     Response available = validateAvailability(currentCar, inputScanner);
 
@@ -167,10 +204,20 @@ public class Main {
                                         System.out.println(Formatter.format(FORMAT.GREEN, available.getMessage()));
 
                                         if (logSign.getCurrentClient() != null) {
-                                            System.out.println("logged in --");
                                             ResponseWithDate responseWithD = (ResponseWithDate) available;
                                             System.out.println(responseWithD.getDate() + " " + responseWithD.getTime() + " " + responseWithD.getDuration() + "min");
-                                            // Todo --> with the data Book the Car
+                                            //----------------------- book found car-----------------//
+                                            Response bookingResponse = bookCar(currentCar, responseWithD.getDate(),
+                                                    responseWithD.getTime(), responseWithD.getDuration(), inputScanner);
+                                            if (bookingResponse != null) {
+                                                FORMAT responseFormat;
+                                                if (bookingResponse.isSuccess()) {
+                                                    responseFormat = FORMAT.GREEN;
+                                                } else {
+                                                    responseFormat = FORMAT.RED;
+                                                }
+                                                System.out.println(Formatter.format(responseFormat, bookingResponse.getMessage()));
+                                            }
                                         } else {
                                             System.out.println("to be able to book this car you must first log in (or sign up");
                                         }
@@ -182,12 +229,69 @@ public class Main {
                                     System.out.println("unknown input");
                                 }
                             }
-                            // TODO --> Login
-
                         }
                     }
                     break;
+                case "l"://--------------------------------- LogIn-----------------------------------------------//
+                    if (logSign.getCurrentClient() != null) {
+                        System.out.println("unknown input");
+                        break;
+                    }
+                    System.out.println("Type in username:");
+                    String username = inputScanner.next();
+                    System.out.println("Type in password");
+                    String password = inputScanner.next();
+                    FORMAT format;
+                    Response loginResponse = logSign.LogIn(username, password);
+                    if (loginResponse.isSuccess()) {
+                        format = FORMAT.GREEN;
+                    } else {
+                        format = FORMAT.RED;
+                    }
+                    System.out.println(Formatter.format(format, loginResponse.getMessage()));
+                    break;
+                case "s"://----------------------------------------------SignUp-----------------------------------------//
+                    if (logSign.getCurrentClient() != null) {
+                        System.out.println("unkown input");
+                        break;
+                    }
 
+                    System.out.println("type in a username:");
+                    String newUsername = inputScanner.next();
+                    System.out.println("Type in a password");
+                    String newPassword = inputScanner.next();
+                    FORMAT errorFormatSign;
+                    Response signUpResponse = logSign.SignUp(newUsername, newPassword);
+                    String hint;
+                    if (signUpResponse.isSuccess()) {
+                        errorFormatSign = FORMAT.GREEN;
+                        hint = " continue to login";
+                    } else {
+                        errorFormatSign = FORMAT.RED;
+                        hint = "try again";
+                    }
+                    System.out.println(Formatter.format(errorFormatSign, signUpResponse.getMessage()) + " " + hint);
+                    break;
+                case "a":
+                    ArrayList<Car> sortedCars = carBO.getAllCarsSorted();
+                    boolean moreCarsToShow = true;
+                    int carpointer =0;
+                   while (moreCarsToShow) {
+                       carBO.showTenCars(sortedCars, carpointer);
+                       if (sortedCars.size() > 10 + carpointer) {
+                           System.out.println("show next page of cars, type: " + Formatter.format(FORMAT.YELLOW, ">") + " else press " + Formatter.format(FORMAT.YELLOW, "ANY KEY"));
+                           String inputNext = inputScanner.next();
+                           if (!inputNext.equals(">")) {
+                               moreCarsToShow = false;
+                           }else {
+                               carpointer+=10;
+                           }
+
+                       }else {
+                           moreCarsToShow = false;
+                       }
+                   }
+                    break;
                 default:
                     System.out.println("unknown input");
                     break;

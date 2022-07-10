@@ -8,18 +8,24 @@ import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 
 public class CarBO {
 
     private final static String carPath = "src/data/cars/";
     private final static String bookingPath = "src/data/bookings/";
+    // comparator, to be able to sort the car arraylist by name alphabetically
+    public static Comparator<Car> carNameComparator = new Comparator<Car>() {
+        @Override
+        public int compare(Car o1, Car o2) {
+            String designation1 = o1.getDesignation().toLowerCase();
+            String designation2 = o2.getDesignation().toLowerCase();
+            return designation1.compareTo(designation2);
+        }
+    };
     private static CarBO instance;
     private ArrayList<Car> allCars;
     private ArrayList<Booking> allBookings;
-
 
     private CarBO() {
         allCars = getCarsFromFiles();
@@ -33,24 +39,14 @@ public class CarBO {
         return instance;
     }
 
-    // comparator, to be able to sort the car arraylist by name alphabetically
-    public static Comparator<Car> carNameComparator = new Comparator<Car>() {
-        @Override
-        public int compare(Car o1, Car o2) {
-            String designation1 = o1.getDesignation().toLowerCase();
-            String designation2 = o2.getDesignation().toLowerCase();
-            return designation1.compareTo(designation2);
-        }
-    };
-
-    public ArrayList<Car> searchCarByDesignation ( String designation, DriveType driveType){
+    public ArrayList<Car> searchCarByDesignation(String designation, DriveType driveType) {
         ArrayList<Car> foundCars = new ArrayList<>();
-        for (int i =0; i< allCars.size();i++){
-           if (allCars.get(i).getDesignation().contains(designation)){
-               if (allCars.get(i).getDriveType().equals(driveType)){
-                   foundCars.add(allCars.get(i));
-               }
-           }
+        for (int i = 0; i < allCars.size(); i++) {
+            if (allCars.get(i).getDesignation().contains(designation)) {
+                if (allCars.get(i).getDriveType().equals(driveType)) {
+                    foundCars.add(allCars.get(i));
+                }
+            }
         }
         return foundCars;
 
@@ -145,9 +141,9 @@ public class CarBO {
         double cost = c.getInitialFee() + c.getPricePerMinute() * duration;
         String currUser = LoginSignup.getInstance().getCurrentClient().getUsername();
         Booking b = new Booking(carID, currUser, date, time, duration, cost, bookingCount);
-        System.out.println(b.toString());
         jsonHandler.getInstance().writeJsonfile(bookingPath, b.getId(), b.toJson());
-        return new Response(true, "created new Booking");
+        return new Response(true, "created new Booking: " + c.getDesignation() + " " + b.getDate() + " " + b.getTime() +
+                " " + b.getDurationInMins() + "-min " + b.getTotalCost() + ",-");
 
     }
 
@@ -191,6 +187,18 @@ public class CarBO {
         }
 
         return new Response(true, "Car is available");
+    }
+
+    public void showTenCars(ArrayList<Car> cars, int pointer) {
+        int iterator = 0;
+        while (iterator < 10) {
+            if (iterator + pointer >= cars.size()) {
+                break;
+            } else {
+                System.out.println("["+(iterator+pointer)+"]"+cars.get(iterator + pointer));
+                iterator++;
+            }
+        }
     }
 
 

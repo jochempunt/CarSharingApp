@@ -1,0 +1,10 @@
+{
+  "id": "HONCIVR",
+  "designation": "Honda Civic Type R",
+  "driveType": "CONVENTIONAL",
+  "earliestTime": "07:30",
+  "latestTime": "22:00",
+  "maxDuration": 240,
+  "pricePerMinute": 0.8,
+  "initialFee": 32.0
+}

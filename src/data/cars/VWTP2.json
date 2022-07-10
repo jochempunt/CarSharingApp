@@ -1,0 +1,10 @@
+{
+  "id": "VWTP2",
+  "designation": "VW Transporter",
+  "driveType": "CONVENTIONAL",
+  "earliestTime": "05:00",
+  "latestTime": "23:00",
+  "maxDuration": 360,
+  "pricePerMinute": 0.5,
+  "initialFee": 30.0
+}
