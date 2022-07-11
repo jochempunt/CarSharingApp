@@ -2,6 +2,8 @@ package main.carSharing;
 
 import com.google.gson.JsonObject;
 import main.utils.DateTimeManager;
+import main.utils.consoleFormat.FORMAT;
+import main.utils.consoleFormat.Formatter;
 import main.utils.jsonHandler;
 
 import java.time.LocalDate;
@@ -40,18 +42,7 @@ public class Booking {
         return totalCost;
     }
 
-    @Override
-    public String toString() {
-        return "Booking{" +
-                "bookingID='" + id + '\'' +
-                ", CarID='" + CarID + '\'' +
-                ", clientName='" + clientName + '\'' +
-                ", date=" + date +
-                ", time=" + time +
-                ", DurationinMins=" + durationInMins +
-                ", totalcosts=" + totalCost + ",-" +
-                '}';
-    }
+
 
     public String getId() {
         return id;

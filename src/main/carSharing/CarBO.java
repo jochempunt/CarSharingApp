@@ -23,6 +23,20 @@ public class CarBO {
             return designation1.compareTo(designation2);
         }
     };
+
+    public static Comparator<Booking> bookingDateComperator = new Comparator<Booking>() {
+        @Override
+        public int compare(Booking o1, Booking o2) {
+            LocalDate date1 = o1.getDate();
+            LocalDate date2 = o2.getDate();
+            int comparedD = date1.compareTo(date2);
+            if (comparedD == 0){
+                return o1.getTime().compareTo(o2.getTime());
+            }else {
+                return comparedD;
+            }
+        }
+    };
     private static CarBO instance;
     private ArrayList<Car> allCars;
     private ArrayList<Booking> allBookings;
@@ -114,6 +128,7 @@ public class CarBO {
             }
 
         }
+
         return bookings;
 
     }
@@ -142,6 +157,7 @@ public class CarBO {
         String currUser = LoginSignup.getInstance().getCurrentClient().getUsername();
         Booking b = new Booking(carID, currUser, date, time, duration, cost, bookingCount);
         jsonHandler.getInstance().writeJsonfile(bookingPath, b.getId(), b.toJson());
+        allBookings.add(b);
         return new Response(true, "created new Booking: " + c.getDesignation() + " " + b.getDate() + " " + b.getTime() +
                 " " + b.getDurationInMins() + "-min " + b.getTotalCost() + ",-");
 
@@ -201,6 +217,17 @@ public class CarBO {
         return availableCars;
     }
 
+    public ArrayList<Booking> getClientsBookings(String clientName){
+        ArrayList<Booking> clientsBookings = new ArrayList<>();
+        for (int i=0;i<allBookings.size();i++){
+            Booking tempBooking = allBookings.get(i);
+            if (tempBooking.getClientName().equals(clientName)){
+                clientsBookings.add(tempBooking);
+            }
+        }
+        clientsBookings.sort(bookingDateComperator);
+        return clientsBookings;
+    }
 
     public void showTenCars(ArrayList<Car> cars, int pointer) {
         int iterator = 0;

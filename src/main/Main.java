@@ -1,6 +1,7 @@
 package main;
 
 import main.Users.LoginSignup;
+import main.carSharing.Booking;
 import main.carSharing.Car;
 import main.carSharing.CarBO;
 import main.carSharing.DriveType;
@@ -358,6 +359,29 @@ public class Main {
                         System.out.println("to book a car please log in or sign up");
                     }
                     break;
+                case "b":
+                    if (logSign.getCurrentClient()== null){
+                        System.out.println("unkown input");
+                        break;
+                    }
+                    ArrayList<Booking> myBookings = carBO.getClientsBookings(logSign.getCurrentClient().getUsername());
+                    for (int i=0; i < myBookings.size();i++){
+                        Booking currentBooking = myBookings.get(i);
+
+                        FORMAT titleFormat;
+                        Car currentCar = carBO.getCarById(currentBooking.getCarID());
+                        if (LocalDate.now().isAfter(currentBooking.getDate()) || (LocalDate.now().isEqual(currentBooking.getDate()) && LocalTime.now().isAfter(currentBooking.getTime()))) {
+                            titleFormat = FORMAT.UNDERSCORE;
+                        }else {
+                            titleFormat = FORMAT.BOLD;
+                        }
+                        System.out.println(Formatter.format(titleFormat,FORMAT.BLUE,currentCar.getDesignation()));
+                        System.out.println(currentBooking.getDate()+" "+ currentBooking.getTime());
+                        System.out.println(currentBooking.getDurationInMins()+"-min");
+                        System.out.println(currentBooking.getTotalCost()+",-");
+
+                    }
+
                 default:
                     System.out.println("unknown input");
                     break;
