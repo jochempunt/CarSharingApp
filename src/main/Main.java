@@ -18,11 +18,6 @@ import java.util.Scanner;
 public class Main {
 
 
-    LocalDate dateE = LocalDate.of(2022, 04, 05);
-    LocalTime timeE = LocalTime.of(14, 00);
-    int duration = 60;
-
-
     //TODO --> view all available cars at specific time
     //TODO --> ensure admin rights
     //TODO --> show all booking and total costs / average
@@ -33,10 +28,7 @@ public class Main {
     }
 
 
-
-
     //function that returns validated console input as  Date and Time , entry[0] = date, entry[1]= time
-
     public static Response bookCar(Car car, LocalDate date, LocalTime time, int duration, Scanner sc) {
         double price = duration * car.getPricePerMinute() + car.getInitialFee();
 
@@ -54,9 +46,8 @@ public class Main {
         return null;
     }
 
-
-    public static String[] inputDateTime(Scanner sc) {
-        String[] dateTimeArray = new String[2];
+    public static String[] inputDateTimeDuration(Scanner sc) {
+        String[] dateTimeArray = new String[3];
         boolean invalidDate = true;
         while (invalidDate) {
             System.out.println("input a desired dat and time , in this format:" +
@@ -75,24 +66,9 @@ public class Main {
                         Formatter.format(FORMAT.YELLOW, "hint: a year has only 12 month and a month can have a maximum of 31 days"));
             }
         }
-        return dateTimeArray;
-    }
-
-
-    public static Response validateAvailability(Car car, Scanner sc) {
-        //Scanner sc = new Scanner(System.in);
-        LocalTime time = null;
-        LocalDate date = null;
-        int duration = 0;
-
-        String[] dateTimeArray = inputDateTime(sc);
-        if (dateTimeArray.length == 2) {
-            date = DateTimeManager.getDateFromString(dateTimeArray[0]);
-            time = DateTimeManager.getTimeFromString(dateTimeArray[1]);
-        }
 
         boolean invalidDuration = true;
-
+        int duration = -1;
         while (invalidDuration) {
             System.out.println("input desired duration in minutes e.g: 60");
             String durationInput = sc.next();
@@ -105,6 +81,24 @@ public class Main {
                 }
             }
         }
+        dateTimeArray[2] = duration + "";
+        return dateTimeArray;
+    }
+
+    public static Response validateAvailability(Car car, Scanner sc) {
+        //Scanner sc = new Scanner(System.in);
+        LocalTime time = null;
+        LocalDate date = null;
+        int duration = 0;
+
+        String[] dateTimeDuration = inputDateTimeDuration(sc);
+        if (dateTimeDuration.length == 3) {
+            date = DateTimeManager.getDateFromString(dateTimeDuration[0]);
+            time = DateTimeManager.getTimeFromString(dateTimeDuration[1]);
+            duration = Integer.parseInt(dateTimeDuration[2]);
+        }
+
+
         Response response = CarBO.getInstance().checkIfCarAvailable(car.getId(), date, time, duration);
         if (response.isSuccess()) {
             response = new ResponseWithDate(response, date, time, duration);
@@ -121,11 +115,6 @@ public class Main {
         // logSign.SignUp("ADMIN","LargeRichard");
         //System.out.println(logSign.LogIn("ADMIN","LargeRichard").getMessage());
         System.out.println("Welcome to the CarSharingApp");
-
-
-
-
-
 
 
         mainloop:
@@ -145,7 +134,7 @@ public class Main {
 
 
             String menuString = "choose an action: " + specialFeaturesString + Formatter.format(FORMAT.BOLD, FORMAT.YELLOW, "a") + " to see All cars, " +
-                    Formatter.format(FORMAT.BOLD, FORMAT.YELLOW, "f") + " to find a specific car or car-brand " + Formatter.format(FORMAT.BOLD, FORMAT.YELLOW, "e") + " to Exit, ";
+                    Formatter.format(FORMAT.BOLD, FORMAT.YELLOW, "f") + " to find a specific car or car-brand " + Formatter.format(FORMAT.BOLD, FORMAT.YELLOW, "v") + " to find all available cars at a desired time " + Formatter.format(FORMAT.BOLD, FORMAT.YELLOW, "e") + " to Exit, ";
 
 
             System.out.println(menuString);
@@ -272,25 +261,102 @@ public class Main {
                     }
                     System.out.println(Formatter.format(errorFormatSign, signUpResponse.getMessage()) + " " + hint);
                     break;
-                case "a":
+                case "a": //------------------------------ Show All Cars ------------------------------------------""
                     ArrayList<Car> sortedCars = carBO.getAllCarsSorted();
                     boolean moreCarsToShow = true;
-                    int carpointer =0;
-                   while (moreCarsToShow) {
-                       carBO.showTenCars(sortedCars, carpointer);
-                       if (sortedCars.size() > 10 + carpointer) {
-                           System.out.println("show next page of cars, type: " + Formatter.format(FORMAT.YELLOW, ">") + " else press " + Formatter.format(FORMAT.YELLOW, "ANY KEY"));
-                           String inputNext = inputScanner.next();
-                           if (!inputNext.equals(">")) {
-                               moreCarsToShow = false;
-                           }else {
-                               carpointer+=10;
-                           }
+                    int carpointer = 0;
+                    while (moreCarsToShow) {
+                        carBO.showTenCars(sortedCars, carpointer);
+                        if (sortedCars.size() > 10 + carpointer) {
+                            System.out.println("show next page of cars, type: " + Formatter.format(FORMAT.YELLOW, ">") + " else press " + Formatter.format(FORMAT.YELLOW, "ANY KEY"));
+                            String inputNext = inputScanner.next();
+                            if (!inputNext.equals(">")) {
+                                moreCarsToShow = false;
+                            } else {
+                                carpointer += 10;
+                            }
 
-                       }else {
-                           moreCarsToShow = false;
-                       }
-                   }
+                        } else {
+                            moreCarsToShow = false;
+                        }
+                    }
+                    System.out.println("Type " + Formatter.format(FORMAT.YELLOW, "a Number of a Desired car") + " to check if its  available and book it or press " +
+                            Formatter.format(FORMAT.YELLOW, "m") + " to exit to the main menu");
+                    String tempInputString = inputScanner.next().toLowerCase();
+                    int nr;
+                    boolean validated = false;
+                    while (!validated)
+                        if (isInteger(tempInputString)) {
+                            nr = Integer.parseInt(tempInputString);
+                            if (nr >= sortedCars.size()) {
+                                System.out.println("Pick a number that matches a car please");
+                            } else {
+
+                                Car tempCar = sortedCars.get(nr);
+                                Response available = validateAvailability(tempCar, inputScanner);
+                                validated = true;
+                                FORMAT availableFormat;
+                                if (available.isSuccess()) {
+                                    System.out.println(Formatter.format(FORMAT.GREEN, available.getMessage()));
+                                    ResponseWithDate dateTimeOfAvailability = (ResponseWithDate) available;
+                                    if (logSign.getCurrentClient() != null) {
+                                        Response bookingResponse = bookCar(tempCar, dateTimeOfAvailability.getDate(), dateTimeOfAvailability.getTime(), dateTimeOfAvailability.getDuration(), inputScanner);
+                                        if (bookingResponse != null) {
+                                            if (bookingResponse.isSuccess()) {
+                                                System.out.println(Formatter.format(FORMAT.GREEN, bookingResponse.getMessage()));
+                                            } else {
+                                                System.out.println(Formatter.format(FORMAT.RED, bookingResponse.getMessage()));
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    System.out.println(Formatter.format(FORMAT.RED, available.getMessage()));
+                                }
+                            }
+
+                        } else if (tempInputString.equals("m")) {
+                            break;
+                        } else {
+                            System.out.println("unkown input");
+                        }
+                    break;
+                case "v":
+                    String[] dateTimeDuration = inputDateTimeDuration(inputScanner);
+                    LocalDate date = DateTimeManager.getDateFromString(dateTimeDuration[0]);
+                    LocalTime time = DateTimeManager.getTimeFromString(dateTimeDuration[1]);
+                    int duration = Integer.parseInt(dateTimeDuration[2]);
+                    ArrayList<Car> availableCars = carBO.getAvailableCars(date, time, duration);
+                    for (int i = 0; i < availableCars.size(); i++) {
+                        System.out.println("[" + i + "]" + availableCars.get(i));
+                    }
+                    if (logSign.getCurrentClient()!=null) {
+                        System.out.println("To book a desired car type its " + Formatter.format(FORMAT.YELLOW, "number") + " to get back to the menu type " + Formatter.format(FORMAT.YELLOW, "m"));
+                        boolean isBooked = false;
+                        String bookingInput = inputScanner.next();
+                        while (!isBooked) {
+                            if (bookingInput.equals("m")) {
+                                break;
+                            } else if (isInteger(bookingInput)) {
+                                int carNr = Integer.parseInt(bookingInput);
+                                if (carNr >= 0 && carNr < availableCars.size()) {
+                                    Response bookingResponse = bookCar(availableCars.get(carNr), date, time, duration, inputScanner);
+                                    isBooked = true;
+                                    if (bookingResponse != null) {
+                                        FORMAT bookingFormat;
+                                        if (bookingResponse.isSuccess()) {
+                                            bookingFormat = FORMAT.GREEN;
+                                        } else {
+                                            bookingFormat = FORMAT.RED;
+                                        }
+                                        System.out.println(Formatter.format(bookingFormat, bookingResponse.getMessage()));
+                                    }
+                                }
+
+                            }
+                        }
+                    }else {
+                        System.out.println("to book a car please log in or sign up");
+                    }
                     break;
                 default:
                     System.out.println("unknown input");

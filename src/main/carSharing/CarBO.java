@@ -189,6 +189,19 @@ public class CarBO {
         return new Response(true, "Car is available");
     }
 
+
+    public ArrayList<Car>getAvailableCars(LocalDate date,LocalTime time,int duration){
+        ArrayList<Car> availableCars = new ArrayList<>();
+        for (int i =0; i< allCars.size();i++){
+            Car tempCar = allCars.get(i);
+            if (checkIfCarAvailable(tempCar.getId(),date,time,duration).isSuccess()){
+                availableCars.add(tempCar);
+            }
+        }
+        return availableCars;
+    }
+
+
     public void showTenCars(ArrayList<Car> cars, int pointer) {
         int iterator = 0;
         while (iterator < 10) {
