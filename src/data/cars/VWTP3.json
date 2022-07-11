@@ -1,0 +1,10 @@
+{
+  "id": "VWTP3",
+  "designation": "VW",
+  "driveType": "CONVENTIONAL",
+  "earliestTime": "01:30",
+  "latestTime": "22:30",
+  "maxDuration": 60,
+  "pricePerMinute": 3.0,
+  "initialFee": 30.0
+}

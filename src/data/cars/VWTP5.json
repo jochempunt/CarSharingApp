@@ -1,0 +1,10 @@
+{
+  "id": "VWTP5",
+  "designation": "VWTransporter",
+  "driveType": "CONVENTIONAL",
+  "earliestTime": "20:30",
+  "latestTime": "22:15",
+  "maxDuration": 30,
+  "pricePerMinute": 0.35,
+  "initialFee": 30.0
+}

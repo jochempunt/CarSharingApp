@@ -5,6 +5,6 @@
   "earliestTime": "06:00",
   "latestTime": "22:30",
   "maxDuration": 120,
-  "pricePerMinute": 30.0,
-  "initialFee": 40.0
+  "pricePerMinute": 0.55,
+  "initialFee": 35.0
 }

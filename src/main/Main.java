@@ -19,10 +19,9 @@ import java.util.Scanner;
 public class Main {
 
 
-    //TODO --> view all available cars at specific time
-    //TODO --> ensure admin rights
-    //TODO --> show all booking and total costs / average
-    // finish program
+    public static boolean isDouble(String s) {
+        return s.matches("([0-9]{1,13}(\\.[0-9]*))?");
+    }
 
     public static boolean isInteger(String s) {
         return s.matches("\\d+");
@@ -42,7 +41,7 @@ public class Main {
             case "n":
                 break;
             default:
-                return new Response(false, "unkown input, please try again");
+                return new Response(false, "unknown input, please try again");
         }
         return null;
     }
@@ -108,13 +107,14 @@ public class Main {
         return response;
     }
 
+    //---------------------------------------- Main ---------------------------------------------//
     public static void main(String[] args) {
 
         LoginSignup logSign = LoginSignup.getInstance();
         CarBO carBO = CarBO.getInstance();
         Scanner inputScanner = new Scanner(System.in);
         // logSign.SignUp("ADMIN","LargeRichard");
-        //System.out.println(logSign.LogIn("ADMIN","LargeRichard").getMessage());
+
         System.out.println("Welcome to the CarSharingApp");
 
 
@@ -123,7 +123,7 @@ public class Main {
             String specialFeaturesString;
             if (logSign.getCurrentClient() == null) {
                 specialFeaturesString = Formatter.format(FORMAT.BOLD, FORMAT.YELLOW, "s") + " to Signup " +
-                        Formatter.format(FORMAT.BOLD, FORMAT.YELLOW, "l") + " to Login or ";
+                        Formatter.format(FORMAT.BOLD, FORMAT.YELLOW, "l") + " to Login ";
             } else {
                 specialFeaturesString = Formatter.format(FORMAT.BOLD, FORMAT.YELLOW, "b") + " to see your previous Bookings, " +
                         Formatter.format(FORMAT.BOLD, FORMAT.YELLOW, "c") + " see cost Statistics, ";
@@ -135,7 +135,8 @@ public class Main {
 
 
             String menuString = "choose an action: " + specialFeaturesString + Formatter.format(FORMAT.BOLD, FORMAT.YELLOW, "a") + " to see All cars, " +
-                    Formatter.format(FORMAT.BOLD, FORMAT.YELLOW, "f") + " to find a specific car or car-brand " + Formatter.format(FORMAT.BOLD, FORMAT.YELLOW, "v") + " to find all available cars at a desired time " + Formatter.format(FORMAT.BOLD, FORMAT.YELLOW, "e") + " to Exit, ";
+                    Formatter.format(FORMAT.BOLD, FORMAT.YELLOW, "f") + " to find a specific car or car-brand " + Formatter.format(FORMAT.BOLD, FORMAT.YELLOW, "v") +
+                    " to find all available cars at desired time " + Formatter.format(FORMAT.BOLD, FORMAT.YELLOW, "e") + " to Exit, ";
 
 
             System.out.println(menuString);
@@ -143,6 +144,7 @@ public class Main {
             switch (input) {
                 case "e": //--------------------------------- Exit-----------------------------------//
                     System.out.println("goodbye");
+                    inputScanner.close();
                     break mainloop;
                 case "f": //-------------------------------- Find Car -------------------------------//
                     System.out.println("type in a car model or brand:");
@@ -242,7 +244,7 @@ public class Main {
                     break;
                 case "s"://----------------------------------------------SignUp-----------------------------------------//
                     if (logSign.getCurrentClient() != null) {
-                        System.out.println("unkown input");
+                        System.out.println("unknown input");
                         break;
                     }
 
@@ -296,7 +298,6 @@ public class Main {
                                 Car tempCar = sortedCars.get(nr);
                                 Response available = validateAvailability(tempCar, inputScanner);
                                 validated = true;
-                                FORMAT availableFormat;
                                 if (available.isSuccess()) {
                                     System.out.println(Formatter.format(FORMAT.GREEN, available.getMessage()));
                                     ResponseWithDate dateTimeOfAvailability = (ResponseWithDate) available;
@@ -318,10 +319,10 @@ public class Main {
                         } else if (tempInputString.equals("m")) {
                             break;
                         } else {
-                            System.out.println("unkown input");
+                            System.out.println("unknown input");
                         }
                     break;
-                case "v":
+                case "v"://------------------------------- find all available cars --------------------------//
                     String[] dateTimeDuration = inputDateTimeDuration(inputScanner);
                     LocalDate date = DateTimeManager.getDateFromString(dateTimeDuration[0]);
                     LocalTime time = DateTimeManager.getTimeFromString(dateTimeDuration[1]);
@@ -330,7 +331,7 @@ public class Main {
                     for (int i = 0; i < availableCars.size(); i++) {
                         System.out.println("[" + i + "]" + availableCars.get(i));
                     }
-                    if (logSign.getCurrentClient()!=null) {
+                    if (logSign.getCurrentClient() != null) {
                         System.out.println("To book a desired car type its " + Formatter.format(FORMAT.YELLOW, "number") + " to get back to the menu type " + Formatter.format(FORMAT.YELLOW, "m"));
                         boolean isBooked = false;
                         String bookingInput = inputScanner.next();
@@ -355,49 +356,193 @@ public class Main {
 
                             }
                         }
-                    }else {
+                    } else {
                         System.out.println("to book a car please log in or sign up");
                     }
                     break;
-                case "b":
-                    if (logSign.getCurrentClient()== null){
-                        System.out.println("unkown input");
+                case "b"://---------------------------- show all bookings ----------------------""
+                    if (logSign.getCurrentClient() == null) {
+                        System.out.println("unknown input");
                         break;
                     }
                     ArrayList<Booking> myBookings = carBO.getClientsBookings(logSign.getCurrentClient().getUsername());
-                    for (int i=0; i < myBookings.size();i++){
+                    if (myBookings.size() == 0) {
+                        System.out.println("this Account has Bookings yet");
+                        break;
+                    }
+
+                    for (int i = 0; i < myBookings.size(); i++) {
                         Booking currentBooking = myBookings.get(i);
 
                         FORMAT titleFormat;
                         Car currentCar = carBO.getCarById(currentBooking.getCarID());
                         if (LocalDate.now().isAfter(currentBooking.getDate()) || (LocalDate.now().isEqual(currentBooking.getDate()) && LocalTime.now().isAfter(currentBooking.getTime()))) {
                             titleFormat = FORMAT.UNDERSCORE;
-                        }else {
+                        } else {
                             titleFormat = FORMAT.BOLD;
                         }
-                        System.out.println(Formatter.format(titleFormat,FORMAT.BLUE,currentCar.getDesignation()));
-                        System.out.println(currentBooking.getDate()+" "+ currentBooking.getTime());
-                        System.out.println(currentBooking.getDurationInMins()+"-min");
-                        System.out.println(currentBooking.getTotalCost()+",-");
-
+                        System.out.println("[" + i + "]" + Formatter.format(titleFormat, FORMAT.BLUE, currentCar.getDesignation()));
+                        System.out.println(DateTimeManager.DateToString(currentBooking.getDate()) + " " + DateTimeManager.timeToString(currentBooking.getTime()));
+                        System.out.println(currentBooking.getDurationInMins() + "-min");
+                        System.out.println(currentBooking.getTotalCost() + ",-");
+                    }
+                    System.out.println("\nhint: bookings in the past, have an " + Formatter.format(FORMAT.BLUE, FORMAT.UNDERSCORE, "underscore") +
+                            ", bookings in the future are " + Formatter.format(FORMAT.BLUE, FORMAT.BOLD, "bold"));
+                    break;
+                case "c"://-------------------------- show cost Statistics ---------------------------------//
+                    if (logSign.getCurrentClient() == null) {
+                        System.out.println("unknown input");
+                        break;
+                    }
+                    ArrayList<Booking> clientBookings = carBO.getClientsBookings(logSign.getCurrentClient().getUsername());
+                    if (clientBookings.size() > 0) {
+                        double totalcosts = 0.0;
+                        double avgCostperBooking;
+                        for (Booking clientBooking : clientBookings) {
+                            totalcosts += clientBooking.getTotalCost();
+                        }
+                        avgCostperBooking = totalcosts / clientBookings.size();
+                        System.out.println("Your total costs are: " + Formatter.format(FORMAT.BLUE, totalcosts + ",-"));
+                        System.out.println("The average cost of your bookings is: " + Formatter.format(FORMAT.BLUE, avgCostperBooking + ",-"));
+                    }
+                    break;
+                case "ac":// --------------------------------------- add Car----------------------------------//
+                    if (logSign.getCurrentClient() == null) {
+                        System.out.println("unkown input");
+                        break;
+                    } else if (!logSign.getCurrentClient().getUsername().equals("ADMIN")) {
+                        System.out.println("unknown input");
+                        break;
+                    }
+                    boolean notUniqueID = true;
+                    String newCarID = "";
+                    while (notUniqueID) {
+                        System.out.println("ADD a unique Car-ID e.g: " + Formatter.format(FORMAT.YELLOW, "VWTP1") + " for the: " +
+                                Formatter.format(FORMAT.BLUE, "VW Transporter"));
+                        newCarID = inputScanner.next();
+                        if (carBO.isUniqueId(newCarID)) {
+                            notUniqueID = false;
+                        } else {
+                            System.out.println("ID is already Taken");
+                        }
                     }
 
+                    System.out.println("Enter a car Designation (Brand + Car name) eg:" +
+                            Formatter.format(FORMAT.BLUE, "VW Transporter"));
+                    String newCarDesignation = inputScanner.next();
+                    newCarDesignation += inputScanner.next();
+
+                    boolean chosenDT = false;
+                    DriveType newCarDT = null;
+                    while (!chosenDT) {
+                        System.out.println("choose a type of drive, type:" + Formatter.format(FORMAT.YELLOW, "e") + " for Electric and " +
+                                Formatter.format(FORMAT.YELLOW, "c") + " for conventional");
+                        String inputDTString = inputScanner.next();
+                        if (inputDTString.equals("e")) {
+                            newCarDT = DriveType.ELECTRIC;
+                            chosenDT = true;
+                        } else if (inputDTString.equals("c")) {
+                            newCarDT = DriveType.CONVENTIONAL;
+                            chosenDT = true;
+                        } else {
+                            System.out.println("unkown input, try again");
+                        }
+                    }
+
+                    boolean correctTimeE = false;
+                    LocalTime newCarEarliest = null;
+                    while (!correctTimeE) {
+                        System.out.println("Enter an earliest time the car can be booked at, in the format" +
+                                Formatter.format(FORMAT.BLUE, "hh:mm"));
+                        String timeString = inputScanner.next();
+                        if (DateTimeManager.isTime(timeString)) {
+                            newCarEarliest = DateTimeManager.getTimeFromString(timeString);
+                            correctTimeE = true;
+                        } else {
+                            System.out.println("Please type in a correct time");
+                        }
+                    }
+
+                    boolean correctTimeL = false;
+                    LocalTime newCarLatest = null;
+                    while (!correctTimeL) {
+                        System.out.println("Enter a latest time, the car can be booked at");
+                        String timeString = inputScanner.next();
+                        if (DateTimeManager.isTime(timeString)) {
+                            newCarLatest = DateTimeManager.getTimeFromString(timeString);
+                            correctTimeL = true;
+                        } else {
+                            System.out.println("Please type in a correct time");
+                        }
+                    }
+                    boolean correctDuration = false;
+                    int newCarDuration = -1;
+                    while (!correctDuration) {
+                        System.out.println("input the maximum duration that the car can be booked for in minutes" +
+                                "e.g:" + Formatter.format(FORMAT.BLUE, "120"));
+                        String durationString = inputScanner.next();
+                        if (isInteger(durationString)) {
+                            int durationInput = Integer.parseInt(durationString);
+                            if (durationInput < 30) {
+                                System.out.println("max Duration must be at least 30 minutes");
+                            } else {
+                                newCarDuration = durationInput;
+                                correctDuration = true;
+                            }
+                        } else {
+                            System.out.println("please input correct duration");
+                        }
+                    }
+
+                    boolean correctFee = false;
+                    double fee = 0.0;
+                    while (!correctFee) {
+                        System.out.println("Type in initial car fee e.g:" + Formatter.format(FORMAT.BLUE, "35.5"));
+                        String inputFeeString = inputScanner.next();
+                        if (isDouble(inputFeeString)) {
+                            double feeInput = Double.parseDouble(inputFeeString);
+                            if (feeInput <= 0) {
+                                System.out.println("fee must be at least more then 0,-");
+                            } else {
+                                fee = feeInput;
+                                correctFee = true;
+                            }
+                        } else {
+                            System.out.println("hint: fee must be a double");
+                        }
+                    }
+
+                    boolean correctPPM = false;
+                    double newCarpricePerMinute = 0.0;
+                    while (!correctPPM) {
+                        System.out.println("Type in price per minute e.g:" + Formatter.format(FORMAT.BLUE, "0.5"));
+                        String inputPPMString = inputScanner.next();
+                        if (isDouble(inputPPMString)) {
+                            double ppmInput = Double.parseDouble(inputPPMString);
+                            if (ppmInput <= 0) {
+                                System.out.println("price per minute must be at least more then 0,-");
+                            } else {
+                                newCarpricePerMinute = ppmInput;
+                                correctPPM = true;
+                            }
+                        } else {
+                            System.out.println("hint: price must be a double");
+                        }
+                    }
+
+                    Response carAddResponse = carBO.addCar(newCarID, newCarDesignation, newCarDT, newCarEarliest, newCarDuration, newCarLatest, newCarpricePerMinute, fee);
+                    if (carAddResponse.isSuccess()) {
+                        System.out.println(Formatter.format(FORMAT.GREEN, carAddResponse.getMessage()));
+                    } else {
+                        System.out.println(Formatter.format(FORMAT.RED, carAddResponse.getMessage()));
+                    }
+                    break;
                 default:
                     System.out.println("unknown input");
                     break;
             }
 
         }
-
-
-        //carBO.addCar(cID,"VW ID.Buzz",DriveType.ELECTRIC,LocalTime.of(6,0),120,LocalTime.of(22,30),30.0,40.0);
-
-        //carBO.bookCar(cID,dateE,timeE,duration);
-
-        //System.out.println(carBO.checkIfCarAvailable(cID,dateE,LocalTime.of(12,30),60).getMessage());
-
-
-        //carBO.getAllCarsSorted().forEach((n)-> System.out.println(n.getDesignation()));
 
 
     }

@@ -1,0 +1,10 @@
+{
+  "id": "VWTP4",
+  "designation": "",
+  "driveType": "ELECTRIC",
+  "earliestTime": "20:30",
+  "latestTime": "22:30",
+  "maxDuration": 40,
+  "pricePerMinute": 0.3,
+  "initialFee": 30.0
+}
