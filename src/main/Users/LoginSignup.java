@@ -15,7 +15,6 @@ public class LoginSignup {
     //private final Client admin = new Client("ADMIN","GdBm5atGoysDReaeh+Rm3o6CMFo\u003d","xHS7rJiF0JN8PiCe");
 
 
-
     private static LoginSignup instance;
     private final String clientPath = "src/data/clients/";
 
@@ -32,7 +31,7 @@ public class LoginSignup {
         return instance;
     }
 
-    public static boolean validNewUsername(String username) {
+    public boolean validNewUsername(String username) {
         return username.matches("^[a-zA-Z0-9]+");
     }
 
@@ -40,9 +39,7 @@ public class LoginSignup {
     public Response LogIn(String username, String password) {
 
 
-
-
-        if (uniqueUsername(username)) {
+        if (isUniqueUsername(username)) {
             return new Response(false, "unknown username");
         }
 
@@ -61,7 +58,7 @@ public class LoginSignup {
         if (!validNewUsername(username)) {
             return new Response(false, "username can only contain alphanumeric values");
         }
-        if (!uniqueUsername(username)) {
+        if (!isUniqueUsername(username)) {
             return new Response(false, "username is already taken");
         }
 
@@ -111,7 +108,7 @@ public class LoginSignup {
     }
 
 
-    private boolean uniqueUsername(String username) {
+    private boolean isUniqueUsername(String username) {
         return !clients.containsKey(username);
     }
 

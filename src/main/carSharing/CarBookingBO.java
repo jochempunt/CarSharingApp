@@ -10,12 +10,26 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-public class CarBO {
+public class CarBookingBO {
 
     private final static String carPath = "src/data/cars/";
     private final static String bookingPath = "src/data/bookings/";
+    private static CarBookingBO instance;
+    private Comparator<Booking> bookingDateComperator = new Comparator<Booking>() {
+        @Override
+        public int compare(Booking o1, Booking o2) {
+            LocalDate date1 = o1.getDate();
+            LocalDate date2 = o2.getDate();
+            int comparedD = date1.compareTo(date2);
+            if (comparedD == 0) {
+                return o1.getTime().compareTo(o2.getTime());
+            } else {
+                return comparedD;
+            }
+        }
+    };
     // comparator, to be able to sort the car arraylist by name alphabetically
-    public static Comparator<Car> carNameComparator = new Comparator<Car>() {
+    private Comparator<Car> carNameComparator = new Comparator<Car>() {
         @Override
         public int compare(Car o1, Car o2) {
             String designation1 = o1.getDesignation().toLowerCase();
@@ -23,32 +37,17 @@ public class CarBO {
             return designation1.compareTo(designation2);
         }
     };
-
-    public static Comparator<Booking> bookingDateComperator = new Comparator<Booking>() {
-        @Override
-        public int compare(Booking o1, Booking o2) {
-            LocalDate date1 = o1.getDate();
-            LocalDate date2 = o2.getDate();
-            int comparedD = date1.compareTo(date2);
-            if (comparedD == 0){
-                return o1.getTime().compareTo(o2.getTime());
-            }else {
-                return comparedD;
-            }
-        }
-    };
-    private static CarBO instance;
     private ArrayList<Car> allCars;
     private ArrayList<Booking> allBookings;
 
-    private CarBO() {
+    private CarBookingBO() {
         allCars = getCarsFromFiles();
         allBookings = getBookingsFromFiles();
     }
 
-    public static CarBO getInstance() {
+    public static CarBookingBO getInstance() {
         if (instance == null) {
-            instance = new CarBO();
+            instance = new CarBookingBO();
         }
         return instance;
     }
@@ -94,7 +93,7 @@ public class CarBO {
 
     }
 
-    public ArrayList<Car> getCarsFromFiles() {
+    private ArrayList<Car> getCarsFromFiles() {
         ArrayList<Car> tempCars = new ArrayList<>();
         File folder = new File(carPath);
         File[] files = folder.listFiles();
@@ -113,7 +112,7 @@ public class CarBO {
     }
 
 
-    public ArrayList<Booking> getBookingsFromFiles() {
+    private ArrayList<Booking> getBookingsFromFiles() {
         ArrayList<Booking> bookings = new ArrayList<>();
         File folder = new File(bookingPath);
         File[] files = folder.listFiles();
@@ -123,12 +122,12 @@ public class CarBO {
                     String fileName = f.getName().replaceFirst("[.][.json]+$", "");
                     Booking tempBooking = jsonHandler.getInstance().readJsonFileToObject(bookingPath, fileName, Booking.class);
                     bookings.add(tempBooking);
+                    System.out.println(tempBooking.toJson());
                 }
 
             }
 
         }
-
         return bookings;
 
     }
@@ -206,22 +205,22 @@ public class CarBO {
     }
 
 
-    public ArrayList<Car>getAvailableCars(LocalDate date,LocalTime time,int duration){
+    public ArrayList<Car> getAvailableCars(LocalDate date, LocalTime time, int duration) {
         ArrayList<Car> availableCars = new ArrayList<>();
-        for (int i =0; i< allCars.size();i++){
+        for (int i = 0; i < allCars.size(); i++) {
             Car tempCar = allCars.get(i);
-            if (checkIfCarAvailable(tempCar.getId(),date,time,duration).isSuccess()){
+            if (checkIfCarAvailable(tempCar.getId(), date, time, duration).isSuccess()) {
                 availableCars.add(tempCar);
             }
         }
         return availableCars;
     }
 
-    public ArrayList<Booking> getClientsBookings(String clientName){
+    public ArrayList<Booking> getClientsBookings(String clientName) {
         ArrayList<Booking> clientsBookings = new ArrayList<>();
-        for (int i=0;i<allBookings.size();i++){
+        for (int i = 0; i < allBookings.size(); i++) {
             Booking tempBooking = allBookings.get(i);
-            if (tempBooking.getClientName().equals(clientName)){
+            if (tempBooking.getClientName().equals(clientName)) {
                 clientsBookings.add(tempBooking);
             }
         }
@@ -229,13 +228,13 @@ public class CarBO {
         return clientsBookings;
     }
 
-    public void showTenCars(ArrayList<Car> cars, int pointer) {
+    public static void showTenCars(ArrayList<Car> cars, int pointer) {
         int iterator = 0;
         while (iterator < 10) {
             if (iterator + pointer >= cars.size()) {
                 break;
             } else {
-                System.out.println("["+(iterator+pointer)+"]"+cars.get(iterator + pointer));
+                System.out.println("[" + (iterator + pointer) + "]" + cars.get(iterator + pointer));
                 iterator++;
             }
         }

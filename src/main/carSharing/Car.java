@@ -10,7 +10,7 @@ import java.time.LocalTime;
 
 public class Car {
 
-    private final String id;
+    private String id;
     private String designation;
     private DriveType driveType;
     private String earliestTime;
@@ -31,16 +31,7 @@ public class Car {
         this.initialFee = initialFee;
     }
 
-    public Car(String id, String designation, DriveType driveType, String earliestTime, String latestTime, int maxDuration, double pricePerMinute, double initialFee) {
-        this.id = id;
-        this.designation = designation;
-        this.driveType = driveType;
-        this.earliestTime = earliestTime;
-        this.latestTime = latestTime;
-        this.maxDuration = maxDuration;
-        this.pricePerMinute = pricePerMinute;
-        this.initialFee = initialFee;
-    }
+
 
 
     // -----------------------------Getters--------------------------------//

@@ -2,46 +2,34 @@ package main.carSharing;
 
 import com.google.gson.JsonObject;
 import main.utils.DateTimeManager;
-import main.utils.consoleFormat.FORMAT;
-import main.utils.consoleFormat.Formatter;
 import main.utils.jsonHandler;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class Booking {
-    private final String id;
-    private final String CarID;
-    private final String clientName;
-    private final String date;
-    private final String time;
-    private final int durationInMins;
-    private final double totalCost;
+    private String id;
+    private String carID;
+    private String clientName;
+    private String date;
+    private String time;
+    private int durationInMins;
+    private double totalCost;
 
     public Booking(String carID, String clientName, LocalDate date, LocalTime time, int durationInMins, double totalCost, int count) {
-        CarID = carID;
+        this.carID = carID;
         this.clientName = clientName;
         this.date = DateTimeManager.DateToString(date);
         this.time = DateTimeManager.timeToString(time);
         this.durationInMins = durationInMins;
         this.totalCost = totalCost;
-        id = carID + "-" + count;
+        this.id = carID + "-" + count;
     }
 
-    public Booking(String carID, String clientName, String date, String time, int durationInMins, double totalCost, String id) {
-        CarID = carID;
-        this.clientName = clientName;
-        this.date = date;
-        this.time = time;
-        this.durationInMins = durationInMins;
-        this.totalCost = totalCost;
-        this.id = id;
-    }
 
     public double getTotalCost() {
         return totalCost;
     }
-
 
 
     public String getId() {
@@ -49,7 +37,7 @@ public class Booking {
     }
 
     public String getCarID() {
-        return CarID;
+        return carID;
     }
 
     public String getClientName() {

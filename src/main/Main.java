@@ -3,7 +3,7 @@ package main;
 import main.Users.LoginSignup;
 import main.carSharing.Booking;
 import main.carSharing.Car;
-import main.carSharing.CarBO;
+import main.carSharing.CarBookingBO;
 import main.carSharing.DriveType;
 import main.utils.DateTimeManager;
 import main.utils.Response;
@@ -37,7 +37,7 @@ public class Main {
         String acceptInput = sc.next();
         switch (acceptInput) {
             case "y":
-                return CarBO.getInstance().bookCar(car.getId(), date, time, duration);
+                return CarBookingBO.getInstance().bookCar(car.getId(), date, time, duration);
             case "n":
                 break;
             default:
@@ -99,7 +99,7 @@ public class Main {
         }
 
 
-        Response response = CarBO.getInstance().checkIfCarAvailable(car.getId(), date, time, duration);
+        Response response = CarBookingBO.getInstance().checkIfCarAvailable(car.getId(), date, time, duration);
         if (response.isSuccess()) {
             response = new ResponseWithDate(response, date, time, duration);
         }
@@ -111,7 +111,7 @@ public class Main {
     public static void main(String[] args) {
 
         LoginSignup logSign = LoginSignup.getInstance();
-        CarBO carBO = CarBO.getInstance();
+        CarBookingBO carBookingBO = CarBookingBO.getInstance();
         Scanner inputScanner = new Scanner(System.in);
         // logSign.SignUp("ADMIN","LargeRichard");
 
@@ -165,7 +165,7 @@ public class Main {
                         }
                         System.out.println("didnt recognise the input");
                     }
-                    ArrayList<Car> foundCars = carBO.searchCarByDesignation(designationS, driveType);
+                    ArrayList<Car> foundCars = carBookingBO.searchCarByDesignation(designationS, driveType);
                     if (foundCars.size() == 0) {
                         System.out.println("sorry we couldn't find any car that matches your search");
                     } else {
@@ -265,11 +265,11 @@ public class Main {
                     System.out.println(Formatter.format(errorFormatSign, signUpResponse.getMessage()) + " " + hint);
                     break;
                 case "a": //------------------------------ Show All Cars ------------------------------------------""
-                    ArrayList<Car> sortedCars = carBO.getAllCarsSorted();
+                    ArrayList<Car> sortedCars = carBookingBO.getAllCarsSorted();
                     boolean moreCarsToShow = true;
                     int carpointer = 0;
                     while (moreCarsToShow) {
-                        carBO.showTenCars(sortedCars, carpointer);
+                        carBookingBO.showTenCars(sortedCars, carpointer);
                         if (sortedCars.size() > 10 + carpointer) {
                             System.out.println("show next page of cars, type: " + Formatter.format(FORMAT.YELLOW, ">") + " else press " + Formatter.format(FORMAT.YELLOW, "ANY KEY"));
                             String inputNext = inputScanner.next();
@@ -327,7 +327,7 @@ public class Main {
                     LocalDate date = DateTimeManager.getDateFromString(dateTimeDuration[0]);
                     LocalTime time = DateTimeManager.getTimeFromString(dateTimeDuration[1]);
                     int duration = Integer.parseInt(dateTimeDuration[2]);
-                    ArrayList<Car> availableCars = carBO.getAvailableCars(date, time, duration);
+                    ArrayList<Car> availableCars = carBookingBO.getAvailableCars(date, time, duration);
                     for (int i = 0; i < availableCars.size(); i++) {
                         System.out.println("[" + i + "]" + availableCars.get(i));
                     }
@@ -365,7 +365,7 @@ public class Main {
                         System.out.println("unknown input");
                         break;
                     }
-                    ArrayList<Booking> myBookings = carBO.getClientsBookings(logSign.getCurrentClient().getUsername());
+                    ArrayList<Booking> myBookings = carBookingBO.getClientsBookings(logSign.getCurrentClient().getUsername());
                     if (myBookings.size() == 0) {
                         System.out.println("this Account has Bookings yet");
                         break;
@@ -375,7 +375,7 @@ public class Main {
                         Booking currentBooking = myBookings.get(i);
 
                         FORMAT titleFormat;
-                        Car currentCar = carBO.getCarById(currentBooking.getCarID());
+                        Car currentCar = carBookingBO.getCarById(currentBooking.getCarID());
                         if (LocalDate.now().isAfter(currentBooking.getDate()) || (LocalDate.now().isEqual(currentBooking.getDate()) && LocalTime.now().isAfter(currentBooking.getTime()))) {
                             titleFormat = FORMAT.UNDERSCORE;
                         } else {
@@ -394,7 +394,7 @@ public class Main {
                         System.out.println("unknown input");
                         break;
                     }
-                    ArrayList<Booking> clientBookings = carBO.getClientsBookings(logSign.getCurrentClient().getUsername());
+                    ArrayList<Booking> clientBookings = carBookingBO.getClientsBookings(logSign.getCurrentClient().getUsername());
                     if (clientBookings.size() > 0) {
                         double totalcosts = 0.0;
                         double avgCostperBooking;
@@ -419,8 +419,9 @@ public class Main {
                     while (notUniqueID) {
                         System.out.println("ADD a unique Car-ID e.g: " + Formatter.format(FORMAT.YELLOW, "VWTP1") + " for the: " +
                                 Formatter.format(FORMAT.BLUE, "VW Transporter"));
+
                         newCarID = inputScanner.next();
-                        if (carBO.isUniqueId(newCarID)) {
+                        if (carBookingBO.isUniqueId(newCarID)) {
                             notUniqueID = false;
                         } else {
                             System.out.println("ID is already Taken");
@@ -530,7 +531,7 @@ public class Main {
                         }
                     }
 
-                    Response carAddResponse = carBO.addCar(newCarID, newCarDesignation, newCarDT, newCarEarliest, newCarDuration, newCarLatest, newCarpricePerMinute, fee);
+                    Response carAddResponse = carBookingBO.addCar(newCarID, newCarDesignation, newCarDT, newCarEarliest, newCarDuration, newCarLatest, newCarpricePerMinute, fee);
                     if (carAddResponse.isSuccess()) {
                         System.out.println(Formatter.format(FORMAT.GREEN, carAddResponse.getMessage()));
                     } else {
