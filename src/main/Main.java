@@ -373,7 +373,6 @@ public class Main {
 
                     for (int i = 0; i < myBookings.size(); i++) {
                         Booking currentBooking = myBookings.get(i);
-
                         FORMAT titleFormat;
                         Car currentCar = carBookingBO.getCarById(currentBooking.getCarID());
                         if (LocalDate.now().isAfter(currentBooking.getDate()) || (LocalDate.now().isEqual(currentBooking.getDate()) && LocalTime.now().isAfter(currentBooking.getTime()))) {
@@ -419,7 +418,6 @@ public class Main {
                     while (notUniqueID) {
                         System.out.println("ADD a unique Car-ID e.g: " + Formatter.format(FORMAT.YELLOW, "VWTP1") + " for the: " +
                                 Formatter.format(FORMAT.BLUE, "VW Transporter"));
-
                         newCarID = inputScanner.next();
                         if (carBookingBO.isUniqueId(newCarID)) {
                             notUniqueID = false;
@@ -476,6 +474,7 @@ public class Main {
                             System.out.println("Please type in a correct time");
                         }
                     }
+
                     boolean correctDuration = false;
                     int newCarDuration = -1;
                     while (!correctDuration) {
@@ -530,7 +529,6 @@ public class Main {
                             System.out.println("hint: price must be a double");
                         }
                     }
-
                     Response carAddResponse = carBookingBO.addCar(newCarID, newCarDesignation, newCarDT, newCarEarliest, newCarDuration, newCarLatest, newCarpricePerMinute, fee);
                     if (carAddResponse.isSuccess()) {
                         System.out.println(Formatter.format(FORMAT.GREEN, carAddResponse.getMessage()));
@@ -542,11 +540,6 @@ public class Main {
                     System.out.println("unknown input");
                     break;
             }
-
         }
-
-
     }
-
-
 }

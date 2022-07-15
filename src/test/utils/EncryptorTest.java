@@ -1,5 +1,6 @@
-package main.utils;
+package utils;
 
+import main.utils.Encryptor;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;

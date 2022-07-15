@@ -1,5 +1,6 @@
-package main.Users;
+package Users;
 
+import main.Users.LoginSignup;
 import main.utils.jsonHandler;
 import org.junit.jupiter.api.*;
 

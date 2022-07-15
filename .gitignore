@@ -1,3 +1,4 @@
 # Project exclude paths
 /out/
 /gson-2.9.0.jar
+/lib
