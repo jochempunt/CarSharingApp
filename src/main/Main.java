@@ -32,7 +32,7 @@ public class Main {
     public static Response bookCar(Car car, LocalDate date, LocalTime time, int duration, Scanner sc) {
         double price = duration * car.getPricePerMinute() + car.getInitialFee();
 
-        System.out.println("Do you want to book" + car.getDesignation() + " for a total of " + price + ",-" +
+        System.out.println("Do you want to book " + car.getDesignation() + " for a total of " + price + ",-" +
                 "\nYes " + Formatter.format(FORMAT.YELLOW, "y") + " No " + Formatter.format(FORMAT.YELLOW, "n"));
         String acceptInput = sc.next();
         switch (acceptInput) {
@@ -50,13 +50,12 @@ public class Main {
         String[] dateTimeArray = new String[3];
         boolean invalidDate = true;
         while (invalidDate) {
-            System.out.println("input a desired dat and time , in this format:" +
+            System.out.println("input a desired date and time , in this format:" +
                     Formatter.format(FORMAT.BLUE, "dd-mm-yy hh:mm") + " e.g: " +
                     "24-04-2000 20:30");
             String dateInput = sc.next();
             String timeInput = sc.next();
             String dateTimeInput = dateInput + " " + timeInput;
-            System.out.println("dateTime = " + dateTimeInput);
             if (DateTimeManager.isDateTime(dateTimeInput)) {
                 invalidDate = false;
                 dateTimeArray[0] = dateInput;

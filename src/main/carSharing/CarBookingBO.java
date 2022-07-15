@@ -122,7 +122,6 @@ public class CarBookingBO {
                     String fileName = f.getName().replaceFirst("[.][.json]+$", "");
                     Booking tempBooking = jsonHandler.getInstance().readJsonFileToObject(bookingPath, fileName, Booking.class);
                     bookings.add(tempBooking);
-                    System.out.println(tempBooking.toJson());
                 }
 
             }
