@@ -1,7 +1,7 @@
 package main.utils.consoleFormat;
 
 public final class Formatter {
-
+    // !! This class is for formatting Text in the Console ( with the use of 'ansi codes')
     private static final String ANSI_RESET = "\u001B[0m";
 
     private Formatter() {
