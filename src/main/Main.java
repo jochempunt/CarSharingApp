@@ -248,7 +248,8 @@ public class Main {
                         break;
                     }
 
-                    System.out.println("type in a username:");
+                    System.out.println("type in a username (caution: the username is case insensitive " +
+                            "and needs to be made of alphanumeric values"+  Formatter.format(FORMAT.BLUE,"(a-z, 0-9)"));
                     String newUsername = inputScanner.next();
                     System.out.println("Type in a password");
                     String newPassword = inputScanner.next();

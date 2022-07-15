@@ -88,6 +88,8 @@ public class LoginSignup {
     private TreeMap<String, Client> getAllClients() {
         File folder = new File(clientPath);
         File[] files = folder.listFiles();
+        // this list is case-insensitive, because usernames are used as filenames aswell,
+        // and filenames shouldn't be differentiated by higher or lowercase
         TreeMap<String, Client> allClients = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
         if (files.length > 0) {
             ArrayList<String> usernames = new ArrayList<>();
