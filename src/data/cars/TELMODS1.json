@@ -1,0 +1,10 @@
+{
+  "id": "TELMODS1",
+  "designation": "Tesla Model S",
+  "driveType": "ELECTRIC",
+  "earliestTime": "07:00",
+  "latestTime": "23:30",
+  "maxDuration": 480,
+  "pricePerMinute": 0.6,
+  "initialFee": 20.5
+}

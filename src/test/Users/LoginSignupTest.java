@@ -32,7 +32,6 @@ class LoginSignupTest {
 
     @Test
     void signUp() {
-
         assertFalse(ls.SignUp("Hans","1234").isSuccess());
         assertTrue(ls.SignUp("Franzi66","abc").isSuccess());
 

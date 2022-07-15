@@ -51,7 +51,7 @@ public class Main {
         boolean invalidDate = true;
         while (invalidDate) {
             System.out.println("input a desired date and time , in this format:" +
-                    Formatter.format(FORMAT.BLUE, "dd-mm-yy hh:mm") + " e.g: " +
+                    Formatter.format(FORMAT.BLUE, "dd-mm-yyyy hh:mm") + " e.g: " +
                     "24-04-2000 20:30");
             String dateInput = sc.next();
             String timeInput = sc.next();
@@ -119,6 +119,7 @@ public class Main {
 
         mainloop:
         while (true) {
+
             String specialFeaturesString;
             if (logSign.getCurrentClient() == null) {
                 specialFeaturesString = Formatter.format(FORMAT.BOLD, FORMAT.YELLOW, "s") + " to Signup " +
@@ -141,11 +142,11 @@ public class Main {
             System.out.println(menuString);
             String input = inputScanner.next().toLowerCase();
             switch (input) {
-                case "e": //--------------------------------- Exit-----------------------------------//
+                case "e": //--------------------------------- Exit-------------------------------------//
                     System.out.println("goodbye");
                     inputScanner.close();
                     break mainloop;
-                case "f": //-------------------------------- Find Car -------------------------------//
+                case "f": //-------------------------------- Find Car ---------------------------------//
                     System.out.println("type in a car model or brand:");
                     String designationS = inputScanner.nextLine();
                     // for optional second word after a space
@@ -197,7 +198,7 @@ public class Main {
                                         if (logSign.getCurrentClient() != null) {
                                             ResponseWithDate responseWithD = (ResponseWithDate) available;
                                             System.out.println(responseWithD.getDate() + " " + responseWithD.getTime() + " " + responseWithD.getDuration() + "min");
-                                            //----------------------- book found car-----------------//
+                                            //------------------------------------ book found car---------------------------//
                                             Response bookingResponse = bookCar(currentCar, responseWithD.getDate(),
                                                     responseWithD.getTime(), responseWithD.getDuration(), inputScanner);
                                             if (bookingResponse != null) {
@@ -223,7 +224,7 @@ public class Main {
                         }
                     }
                     break;
-                case "l"://--------------------------------- LogIn-----------------------------------------------//
+                case "l"://-------------------------------------------------------LogIn-----------------------------------------------//
                     if (logSign.getCurrentClient() != null) {
                         System.out.println("unknown input");
                         break;
@@ -241,7 +242,7 @@ public class Main {
                     }
                     System.out.println(Formatter.format(format, loginResponse.getMessage()));
                     break;
-                case "s"://----------------------------------------------SignUp-----------------------------------------//
+                case "s"://--------------------------------------------------------SignUp-----------------------------------------------//
                     if (logSign.getCurrentClient() != null) {
                         System.out.println("unknown input");
                         break;
@@ -263,7 +264,7 @@ public class Main {
                     }
                     System.out.println(Formatter.format(errorFormatSign, signUpResponse.getMessage()) + " " + hint);
                     break;
-                case "a": //------------------------------ Show All Cars ------------------------------------------""
+                case "a": //------------------------------------------------ Show All Cars -----------------------------------------------------""
                     ArrayList<Car> sortedCars = carBookingBO.getAllCarsSorted();
                     boolean moreCarsToShow = true;
                     int carpointer = 0;
@@ -297,6 +298,7 @@ public class Main {
                                 Car tempCar = sortedCars.get(nr);
                                 Response available = validateAvailability(tempCar, inputScanner);
                                 validated = true;
+
                                 if (available.isSuccess()) {
                                     System.out.println(Formatter.format(FORMAT.GREEN, available.getMessage()));
                                     ResponseWithDate dateTimeOfAvailability = (ResponseWithDate) available;
@@ -321,7 +323,7 @@ public class Main {
                             System.out.println("unknown input");
                         }
                     break;
-                case "v"://------------------------------- find all available cars --------------------------//
+                case "v"://---------------------------------------- find all available cars ------------------------------//
                     String[] dateTimeDuration = inputDateTimeDuration(inputScanner);
                     LocalDate date = DateTimeManager.getDateFromString(dateTimeDuration[0]);
                     LocalTime time = DateTimeManager.getTimeFromString(dateTimeDuration[1]);
@@ -359,7 +361,7 @@ public class Main {
                         System.out.println("to book a car please log in or sign up");
                     }
                     break;
-                case "b"://---------------------------- show all bookings ----------------------""
+                case "b"://----------------------------------------- show all bookings -----------------------------""
                     if (logSign.getCurrentClient() == null) {
                         System.out.println("unknown input");
                         break;
@@ -387,7 +389,7 @@ public class Main {
                     System.out.println("\nhint: bookings in the past, have an " + Formatter.format(FORMAT.BLUE, FORMAT.UNDERSCORE, "underscore") +
                             ", bookings in the future are " + Formatter.format(FORMAT.BLUE, FORMAT.BOLD, "bold"));
                     break;
-                case "c"://-------------------------- show cost Statistics ---------------------------------//
+                case "c"://--------------------------------------- show cost Statistics -----------------------------------------//
                     if (logSign.getCurrentClient() == null) {
                         System.out.println("unknown input");
                         break;

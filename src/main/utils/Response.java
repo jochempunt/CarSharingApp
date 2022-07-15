@@ -14,8 +14,6 @@ public class Response {
     }
 
 
-
-
     public boolean isSuccess() {
         return success;
     }
